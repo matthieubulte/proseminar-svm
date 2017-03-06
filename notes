@@ -1,0 +1,76 @@
++ Learning with Kernels
+  + Hard margin SVM : present the general idea of svm in idead
+    world (linearly separable data)
+
+    The goal of this section is to present Support Vector Machines
+    and how they learn *the* optimal boundary for a two classes
+    separation problem.
+
+    + Margin maximization
+    Here, we present the optimization formulation of SVMs and present
+    why they lead to the optimal bouindary.
+
+    First the optimization goal is to maximize the size of the margin
+    (TODO: find a paper showing that margin maximization = best sep)
+
+    Second show that the minimum is obtained because the optimization
+    is coinvex.
+    (TODO: find a proof that the Grammian matrix is positive
+    semi-definite)
+
+    + Support vectors
+    Here it would be nice to have some graph sowing the conceptual
+    role of the SVs, and show why they're called as such.
+
+    Say something about how the number of support vectors helps
+    approximate the out of sample error.
+    (TODO: find a paper about this. it should be in any paper about
+    SVMs, but a clear and quotable formulation would be good) 
+
+    + Conclusion: Best linear separation
+ 
+  + Drawbacks
+    + Hyperparameters selection: grid search
+    + Kernel selection
+    + Performances
+    + Extra on soft margin (introduce C tuning parameter)
+    + Overfitting
+      + 
+    + Black box
+    + Two classes only
+      + Multi classes
+      	+ NxN: very slow to train
+	+ N: one against all
+	
+ + Not linear separable: the Kernel trick
+    + Idea: feature extraction, going in other vector space
+    + Kernel trick: same procedure with a different Gramian matrix
+    + Advanced examples: infinite dimensions, RBF kernel
+    + Conclusion: all problems solved, we're happy
+
++ intersting things
+  + margin optimization is the original target and proper
+    classification is a constraint. In regression it's the opposite
+  + parallel to KNN for RBF Kernel with no regularization
+  + SVR for 
+
+
+
+http://w.svms.org/training/BOGV92.pdf
+https://www.amazon.com/Statistical-Learning-Theory-Vladimir-Vapnik/dp/0471030031
+
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.42.1588&rep=rep1&type=pdf
+
+http://image.diku.dk/imagecanon/material/cortes_vapnik95.pdf
+
+http://svms.org/tutorials/Burges1998.pdf
+
+http://users.ecs.soton.ac.uk/srg/publications/pdf/SVM.pdf
+
+https://www.sec.in.tum.de/assets/lehre/ws0910/ml/slideslecture8.pdf
+
+http://www.kernel-machines.org/
+http://www.support-vector.net/
+http://www.svms.org/
+http://cs229.stanford.edu/notes/cs229-notes3.pdf
+http://www.svms.org/history.html
