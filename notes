@@ -10,11 +10,14 @@
     Here, we present the optimization formulation of SVMs and present
     why they lead to the optimal bouindary.
 
-    First the optimization goal is to maximize the size of the margin
+    First the optimization goal is to maximize the size of the margin.
     (TODO: find a paper showing that margin maximization = best sep)
+    Then make a parallel to simple linear regression where margin
+    optimization is only a constraint. (TODO: is that true? go learn
+    something about this and paper to support this claim)
 
     Second show that the minimum is obtained because the optimization
-    is coinvex.
+    is convex.
     (TODO: find a proof that the Grammian matrix is positive
     semi-definite)
 
@@ -25,34 +28,78 @@
     Say something about how the number of support vectors helps
     approximate the out of sample error.
     (TODO: find a paper about this. it should be in any paper about
-    SVMs, but a clear and quotable formulation would be good) 
+    SVMs, but a clear and quotable formulation would be good)
 
-    + Conclusion: Best linear separation
- 
-  + Drawbacks
-    + Hyperparameters selection: grid search
-    + Kernel selection
-    + Performances
-    + Extra on soft margin (introduce C tuning parameter)
+
+  + Non linear separable
+  In this section we first present the different kinds of issues
+  SVMs can have with non-linearly separable datasets and present
+  solutions to these.
+
+  NOTE: the focus point of this paper is Kernels. It might be
+  wiser to move the section on soft margin in the previous chapter
+  and have one whole only on presenting the kernel trick with examples.
+
+    + Soft margin
+    Here we tackle the problem of linearly separable models with
+    noisy data: shallow boundaries or outliers. The solution to this
+    problem is to introduce a penalty for each point that is
+    misclassified by the model. This results in the same optimization
+    problem (yay)
+
+    + Kernels - Intro
+    This section is about datasets with a non linearly separable
+    underlying model. A good example might be one class forming
+    a disk with the other class all around on the plane. Linear
+    SVM will terribly fail at finding a linear boundary because
+    the actual data for this boundary should be a circle around
+    the disk.
+    Present the (already used everywhere) idea of feature engineering
+    using a projection in 3D with a polynomial new component. 
+    Talk about the polynomial space, show that (1 + <x, x'>)^Q is a
+    polynomial of degree Q and that its equal to the scalar product
+    in the polynomial space.
+    \o/ ***KERNEL TRICK*** \o/
+    Here we show that we can use our new scalar product with the exact
+    same machinery as before, just replacing the Grammian matrix with
+    our new scalar product.
+
+  + Kernels, the real power of SVMs
+  This is the section where we talk about kernels in further details.
+
+  NOTE: maybe make the last section of the previous chapter smaller
+  to move some of the proofs to this section. Previous section will then
+  present the idea of feature engineering and that SVM handle it *just
+  well* and this section goes into the details.
+  
+  The goal of this chapter will be to present interestion things
+  that can be done with kernels, as well as important kernels together
+  with analogies to other ML techniques (RBF with no regularization
+  is equivalent to KNN, quote some paper or show a nice image)
+
+ (+ Not linear separable: the Kernel trick
+    + Idea: feature extraction, going in other vector space
+    + Kernel trick: same procedure with a different Gramian matrix
+    + Advanced examples: infinite dimensions, RBF kernel
+    + Conclusion: all problems solved, we're happy)
+
+  + Drawbacks           NOTE: this can be left as a small chapter at    			      the end
+
+    -- General drawbacks
     + Overfitting
-      + 
     + Black box
     + Two classes only
       + Multi classes
       	+ NxN: very slow to train
 	+ N: one against all
-	
- + Not linear separable: the Kernel trick
-    + Idea: feature extraction, going in other vector space
-    + Kernel trick: same procedure with a different Gramian matrix
-    + Advanced examples: infinite dimensions, RBF kernel
-    + Conclusion: all problems solved, we're happy
 
-+ intersting things
-  + margin optimization is the original target and proper
-    classification is a constraint. In regression it's the opposite
-  + parallel to KNN for RBF Kernel with no regularization
-  + SVR for 
+    -- Kernel methods specific
+    + Hyperparameters selection: grid search
+    + Kernel selection    
+    + Performances
+	
+
+  + SVR for regression? should this be mentioned? 
 
 
 
