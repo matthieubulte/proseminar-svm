@@ -1,6 +1,30 @@
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "learning_with_kernels"
+%%% End:
+
 \section {First steps: hard margin classifier}
 
+note: maybe rename this to be the max margin algo and subsection with hard margin
 
+The hard margin classifier learns the parameters $\mathbf{w} \in \mathbb{R}^n$ and $b \in \mathbb{R}$ of a hyperplane $\mathscr{H} \subset \mathbb{R}^n$, separating two classes of observations $\mathbf{x}$ of dimension $n$. To train it, the algorithm takes a set of $m$ observations $\mathbf{x_i}$ together with a vector of labels $y_i = \pm 1$ for each of the observations:
+
+$$
+(\mathbf{x_1}, y_1), (\mathbf{x_2}, y_2), \dotsc, (\mathbf{x_m}, y_m)
+$$
+
+The learned parameters are then used to define a decision function $f$, assigning to points of $\mathbb{R}^n$ a label $\pm 1$ corresponding to the side of the hyperplane on which the points stands:
+
+\begin{equation}
+  f(\mathbf{x}) = sgn(\langle\mathbf{w}, \mathbf{x}\rangle + b)
+\end{equation}
 
 \subsection {Margin maximization}
+
+One particularity about the learning algorithm used for Support Vector Machines is the loss function the algorithm tries to optimize. Other learning algorithms typically chose a loss function based on the empirical risk, defined as following for a function $f$ and a training set $(\mathbf{x}, \mathbf{y})$ of size $m$:
+
+$$R_{emp}[f] = \frac{1}{m}\sum^m_{i=0}\frac{1}{2}|f(\mathbf{x_i}) - y_i|$$
+
+The margin maximization algorithm, instead tries to maximize the distance from the training points $\mathbf{x}$ to the learned hyperplane $\mathscr{H}$, thus 
+
 \subsection {Support vectors}

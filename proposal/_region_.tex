@@ -1,34 +1,22 @@
-\message{ !name(section1.tex)}
-\message{ !name(section1.tex) !offset(-2) }
-\section{Kapitel}
+\message{ !name(hard_margin_svm.tex)}
+\message{ !name(hard_margin_svm.tex) !offset(-2) }
+\section {First steps: hard margin classifier}
 
-blabla
+note: maybe rename this to be the max margin algo and subsection with hard margin
 
-test
+The hard margin classifier learns a hyperplane in $\1^n$, defined by an orthogonal vector $\mathbf{w} \in \R ^n$ and an offset $b \in \R$, separating several classes of observations $\mathbf{x}$ of dimension $n$ into two classes. To train it, the algorithm takes a set of $m$ observations $\mathbf{x_i}$ together with a vector of labels $y_i = \pm 1$ for each of the observations:
 
-toastr
+$$
+(\mathbf{x_1}, y_1), (\mathbf{x_2}, y_2), \ldots, (\mathbf{x_m}, y_m)
+$$
+
+What is being is learn is the following decision function:
+$$f : \R ^n \rightarrow \{-1, 1\}
+\mathbf{x} \mapsto sgn(<\mathbf{w}, \mathbf{x}> + b)
+$$ 
+
+\subsection {Margin maximization}
 
 
-\subsection{Unterkapitel}
-
-blabla mit drei Quellenangaben\cite{ietf-ipfix-protocol,snoeren2001hash,belenky2003ip}
-
-\begin{figure}[h]%
- 	\begin{center}%
-% 		\includegraphics[scale=0.1]{figure1.png}%
-% 		\caption{Baum}\label{fig:baum}%
- 	\end{center}%
-\end{figure}
-
-\begin{table}[h]%
- 	\begin{center}%
-		\caption{Beispieltabelle}\label{tab:example}%
-	 	\begin{tabular}{c|c}%
- 			Spalte1 & Spalte2\\
- 			\hline
- 			0 & 1\\
- 		\end{tabular}%
- 	\end{center}%
-\end{table}
-
-\message{ !name(section1.tex) !offset(-34) }
+\subsection {Support vectors}
+\message{ !name(hard_margin_svm.tex) !offset(-22) }
