@@ -5,8 +5,6 @@
 
 \section {First steps: hard margin classifier}
 
-note: maybe rename this to be the max margin algo and subsection with hard margin
-
 The hard margin classifier learns the parameters $\mathbf{w} \in \mathbb{R}^n$ and $b \in \mathbb{R}$ of a hyperplane $\mathscr{H} \subset \mathbb{R}^n$, separating two classes of observations $\mathbf{x}$ of dimension $n$. To train it, the algorithm takes a set of $m$ observations $\mathbf{x_i}$ together with a vector of labels $y_i = \pm 1$ for each of the observations:
 
 $$
@@ -23,8 +21,39 @@ The learned parameters are then used to define a decision function $f$, assignin
 
 One particularity about the learning algorithm used for Support Vector Machines is the loss function the algorithm tries to optimize. Other learning algorithms typically chose a loss function based on the empirical risk, defined as following for a function $f$ and a training set $(\mathbf{x}, \mathbf{y})$ of size $m$:
 
-$$R_{emp}[f] = \frac{1}{m}\sum^m_{i=0}\frac{1}{2}|f(\mathbf{x_i}) - y_i|$$
+\begin{equation}
+  R_{emp}[f] = \frac{1}{m}\sum^m_{i=0}\frac{1}{2}|f(\mathbf{x_i}) - y_i|
+\end{equation}
 
-The margin maximization algorithm, instead tries to maximize the distance from the training points $\mathbf{x}$ to the learned hyperplane $\mathscr{H}$, thus 
+The margin maximization algorithm instead, searches within the space of hyperplanes properly classifying the training set, for the hyperplane with the largest distance from the training points to the hyperplane. This can be translated in the following constrained optimization problem:
+
+\begin{equation}
+  \begin{aligned}
+    &\underset{\mathbf{w} \in \mathbb{R}^n, b \in \mathbb{R}} {\text{maximize}}
+    & & M := \frac{1}{\|\mathbf{w}\|} \underset{i} {min}\ 
+    y_i(\langle\mathbf{w},\mathbf{x_i}\rangle + b)\\
+    &\text{subject to}
+    & &y_i(\langle\mathbf{w},\mathbf{x_i}\rangle + b) \ge M
+  \end{aligned}
+\end{equation}
+
+Assuming that a solution to this optimization problem exisits, it still has the issue that although the solution hyperplane is unique, there is an inifity of parameter vectors $\|\mathbf{w}\|$ resulting in the solution hyperplane, only differing in their length. Uniqueness of $\mathbf{w}$ can be ensured by adding to its length the follwoing contraint:
+
+$$M\|\mathbf{w}\| = 1$$
+
+We can thus reformulate the optimization problem into the following quadratic optimization problem which is known to have a numerical solution:
+
+\begin{equation}
+  \begin{aligned}
+    &\underset{\mathbf{w} \in \mathbb{R}^n, b \in \mathbb{R}} {\text{minimize}}
+    & &\|\mathbf{w}\|\\
+    &\text{subject to}
+    & &y_i(\langle\mathbf{w},\mathbf{x_i}\rangle + b) \ge 1
+  \end{aligned}
+\end{equation}
 
 \subsection {Support vectors}
+
+Although the previous formulation of the problem helped us to better understand the ideas of support vector machines, the resulting quadratic problem is in practice too hard to solve for a very large $m$. We will, in this section, introduce another formulation of the optimization problem that will not only make it computationally more practical, but will also give us more insights about the resulting hyperplane.
+
+
