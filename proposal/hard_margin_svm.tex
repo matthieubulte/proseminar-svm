@@ -22,10 +22,14 @@ The learned parameters are then used to define a decision function $f$, assignin
 One particularity about the learning algorithm used for Support Vector Machines is the loss function the algorithm tries to optimize. Other learning algorithms typically chose a loss function based on the empirical risk, defined as following for a function $f$ and a training set $(\mathbf{x}, \mathbf{y})$ of size $m$:
 
 \begin{equation}
-  R_{emp}[f] = \frac{1}{m}\sum^m_{i=0}\frac{1}{2}|f(\mathbf{x_i}) - y_i|
+  R_{emp}[f] = \frac{1}{m}\sum^m_{i=1}\frac{1}{2}|f(\mathbf{x_i}) - y_i|
 \end{equation}
 
 The margin maximization algorithm instead, searches within the space of hyperplanes properly classifying the training set, for the hyperplane with the largest distance from the training points to the hyperplane. This can be translated in the following constrained optimization problem:
+
+\textcolor[rgb]{1,0,0}{
+NOTE: before jumping into equations, maybe explain the reason why we want to maximize the margin. argument using the noise around sample.
+}
 
 \begin{equation}
   \begin{aligned}
@@ -33,7 +37,7 @@ The margin maximization algorithm instead, searches within the space of hyperpla
     & & M := \frac{1}{\|\mathbf{w}\|} \underset{i} {min}\ 
     y_i(\langle\mathbf{w},\mathbf{x_i}\rangle + b)\\
     &\text{subject to}
-    & &y_i(\langle\mathbf{w},\mathbf{x_i}\rangle + b) \ge M
+    & &y_i(\langle\mathbf{w},\mathbf{x_i}\rangle + b) \ge M\ \text{for all}\ i = 1 \dotsc m
   \end{aligned}
 \end{equation}
 
@@ -48,12 +52,62 @@ We can thus reformulate the optimization problem into the following quadratic op
     &\underset{\mathbf{w} \in \mathbb{R}^n, b \in \mathbb{R}} {\text{minimize}}
     & &\|\mathbf{w}\|\\
     &\text{subject to}
-    & &y_i(\langle\mathbf{w},\mathbf{x_i}\rangle + b) \ge 1
+    & &y_i(\langle\mathbf{w},\mathbf{x_i}\rangle + b) \ge 1\ \text{for all}\ i = 1 \dotsc m
   \end{aligned}
 \end{equation}
 
 \subsection {Support vectors}
 
-Although the previous formulation of the problem helped us to better understand the ideas of support vector machines, the resulting quadratic problem is in practice too hard to solve for a very large $m$. We will, in this section, introduce another formulation of the optimization problem that will not only make it computationally more practical, but will also give us more insights about the resulting hyperplane.
+Although the previous formulation of the problem helped us to better understand the ideas of support vector machines, the resulting quadratic problem will become impractical when later introducing kernels methods. We will introduce in this section an equivalent formulation of the optimization problem (4)\textcolor[rgb]{1,0,0}{can latex handle references instead of hard coding?}
+  that will not only solve computational issues, but will also give us more insights about the resulting solution.
 
+In order to get to these benefits, we introduce the Lagrangian $L$ together with Lagrange multipliers $\alpha_i \ge 0$:
 
+\begin{equation}
+  L(\mathbf{w}, b, \boldsymbol{\alpha}) = \frac{1}{2}\|\mathbf{w}\|^2 - \sum^m_{i=1} \alpha_i[y_i(\langle \mathbf{w}, \mathbf{x_i}\rangle + b)) - 1]
+\end{equation}
+
+This is called the dual formulation of our original optimization problem, called the primal problem, in which $\mathbf{w}$ and $b$ are called primal variables, and $\boldsymbol{\alpha}$ the dual variable. It can be shown \textcolor[rgb]{1,0,0}{ref?} that the promal optimization problem is equivalent to finding a saddle point of $L$, minimizing with respect to $\mathbf{w}$ and $b$, while maximizing it with respect to $
+\boldsymbol{\alpha}$.
+
+Because the solution of this dual problem is a saddle point, thus an extremum with respect to all variables, following equalities must hold:
+
+\begin{equation}
+  \frac{\partial}{\partial b}L(\mathbf{w}, b, \boldsymbol{\alpha}) = 0,\ 
+  \frac{\partial}{\partial \mathbf{w}}L(\mathbf{w}, b, \boldsymbol{\alpha}) = 0
+\end{equation}
+
+leading to
+
+\begin{equation}
+\sum^m_{i=1} \boldsymbol{\alpha}_iy_i = 0  
+\end{equation}
+
+and 
+
+\begin{equation}
+  \begin{aligned}
+    &\mathbf{w} - \sum^m_{i=1} \alpha_iy_i\mathbf{x_i} = 0 \\
+    \Rightarrow\ &\mathbf{w} = \sum^m_{i=1} \alpha_iy_i\mathbf{x_i}
+  \end{aligned}
+\end{equation}
+
+Further, by replacing $(7)$ and $(8)$ into the Lagrangian, we obtain an optimization problem free of primal variables:
+
+\begin{equation}
+  \begin{aligned}
+    &\underset{\boldsymbol{\alpha} \in \mathbb{R}^n} {\text{maximize}}
+    & & W(\boldsymbol{\alpha}) = \sum_{i=1}^m\boldsymbol{\alpha}_i - \frac{1}{2}\sum_{i,j=1}^m\boldsymbol{\alpha}_i\boldsymbol{\alpha}_jy_iy_j\langle\mathbf{x}_i, \mathbf{x}_j\rangle\\
+    &\text{subject to}
+    & &\boldsymbol{\alpha} \ge 0\ \text{for all}\ i = 1 \dotsc m\\
+    & & &\sum^m_{i=1} \boldsymbol{\alpha}_iy_i = 0
+  \end{aligned}
+\end{equation}
+
+Finally, the Karush-Kuhn-Tucker theorem states that the solution $\boldsymbol{\alpha}$ satisfies the following equality for all $i = 1\dotsc m$
+
+\begin{equation}
+  \boldsymbol{\alpha}_i[y_i(\langle \mathbf{w}, \mathbf{x_i}\rangle + b) - 1] = 0
+\end{equation}
+
+The importance of this equality is twofold. First, it allows us to compute $b$ from an observation $i$ for whichs $\boldsymbol{\alpha}_i \neq 0$. Second and most importantly, this equality implies that every observations not lying on the margin must have a vanishing Lagrangian coefficient. These observations are called \textit{support vectors}.
