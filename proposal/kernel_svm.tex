@@ -1,4 +1,29 @@
 \section {Kernel methods}
 
+The previous section introduced the large margin classifier. The large margin classifier, as we saw, allows us the find the best seperating hyperplane between two linearly seperable classes of a dataset. In this section we introduce the concept of kernels, allowing us to learn non linear decision boudaries, continuing with the Mercer theorem and kernel trick, results from functional analysis allowing us to use the newly introducd ideas of kernels with the previously introduces agorithm, with only light modifications.
+
+\subsection{Non linearly separable data}
+
+Very often, the decision boundary one is trying to learn is in it's nature non-linear. One trick that is often used in order to use linear learning algorithms is to add one or several dimensions to the data points by applying a non linear function of the coordinates of the point, to then learn the separating hyperplane in the projected space. This method is known as features engineering, because we add engineered features to our data points.
+
+
+This approach would be very simple to implement in our current algorithm. Let $\phi : \mathcal{X} \rightarrow \mathcal{V}$ be a non linear transformation from our original space $\mathcal{X}$ to some higer dimensional Hilbert space $\mathcal{V}$. We can now modify the previously introduced algorithm by replacing simply every scalar product $\left<\cdot , \cdot\right>$ by the scalar product on the projected points in the $\mathcal{V}$ space, namely $\left<\phi(\cdot), \phi(\cdot)\right>$.
+
+
+
+\textcolor[rgb]{1,0,0}{todo, maybe more detail on modifying our algorithmus? I don't think it's really interesting, but reader is curerntly in the middle of a very large text block, which we could break by adding some formulas? }
+\textcolor[rgb]{1,0,0}{todo, add figure for non linear transformation}
+
+\iffalse The method of projecting the dataset in a higher dimensional with some non linear function, while being easy to implement, suffers from the cost of the intermediate representation of the dataset. Indeed, one has to choose between finding the right projection space to where to linear separation of the data is made possible, and not choosing a too high dimensional projection space, otherwise making the algorithm to expensive in terms of memory and runtime. Fortunately, we will now present the kernel trick and show how it solves this one exact problem in a non intrusive way.
+\fi
+
 \subsection {The kernel trick}
+
+
+
 \subsection {Some useful kernels}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "learning_with_kernels"
+%%% End:
