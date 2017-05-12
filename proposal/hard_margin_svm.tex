@@ -5,6 +5,7 @@
 
 \section {Margin maximization classifier}
 
+
 The hard margin classifier learns the parameters $\mathbf{w} \in \mathbb{R}^n$ and $b \in \mathbb{R}$ of a hyperplane $\mathscr{H} \subset \mathbb{R}^n$, separating two classes of observations $\mathbf{x_i} \in \mathcal{X} \subset \mathbb{R}^n$. To train it, the algorithm takes a set of $m$ observations $\mathbf{x_i}$ together with a vector of labels $y_i = \pm 1$ for each of the observations:
 
 $$
@@ -59,6 +60,20 @@ We can thus reformulate the optimization problem into the following quadratic op
     & &y_i(\langle\mathbf{w},\mathbf{x_i}\rangle + b) \ge 1\ \text{for all}\ i = 1 \dotsc m
   \end{aligned}
 \end{equation}
+
+
+\begin{figure*}
+  \begin{minipage}{.5\textwidth}
+    \centering
+    \input{fig1}
+  \end{minipage}%
+  \begin{minipage}{.5\textwidth}
+    \centering
+    \input{fig2}
+  \end{minipage}
+
+  \caption{youpi}
+\end{figure*}
 
 \subsection {Support vectors}
 
