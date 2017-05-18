@@ -1,8 +1,3 @@
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "learning_with_kernels"
-%%% End:
-
 \section {Margin maximization classifier}
 
 
@@ -127,7 +122,7 @@ Finally, the Karush-Kuhn-Tucker theorem states that the solution $\boldsymbol{\a
 
 The importance of this equality is twofold. First, it allows us to compute $b$ from an observation $i$ for whichs $\boldsymbol{\alpha}_i \neq 0$. Second and most importantly, this equality implies that every observations not lying on the margin must have a vanishing Lagrangian coefficient. These special observations are called \textit{support vectors}.
 
-Support vectors have a special role. Indeed, looking at (7), one notices that the hyperplane only is only dependent on the support vectors. All other observations vanish from the sum because of their null Lagrange coefficient. This means that all the information extracted from the training set was represented by the support vectors, and all other observations had no role in the training of the algorithm, thus have no role in defining the decision boundary between the two classes of observations. This also means that. This statement can also be visualized in figure X where the algorithm learned a non linear decision boundary, in which one can observe how the support vectors define the path along which the decision boundary goes.
+Support vectors have a special role. Indeed, looking at (7), one notices that the hyperplane only is only dependent on the support vectors. All other observations vanish from the sum because of their null Lagrange coefficient. This means that all the information extracted from the training set was represented by the support vectors, and all other observations had no role in the training of the algorithm, thus have no role in defining the decision boundary between the two classes of observations.
 
 \subsection{Towards SVMs}
 

@@ -1,4 +1,18 @@
-\section {Kernel methods}
+\begin{figure*}
+  \begin{minipage}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{influence_map.png}
+  \end{minipage}%
+  \begin{minipage}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{decision_boundary.png}
+  \end{minipage}
+  \caption{
+    Left side shows on the vertical axis the influence level of the point on the 2d plane from two positive points drawn  with \textbf{x} markers and of one negative points marked with \textbf{o}. The right pane shows the contour levels of the decision function learned using an RBF kernel.
+  }
+\end{figure*}
+
+\section{Kernel methods}
 
 The previous section introduced the large margin classifier. The large margin classifier, as we saw, allows us the find the best seperating hyperplane between two linearly seperable classes of a dataset. In this section we introduce the concept of kernels, allowing us to learn non linear decision boudaries, continuing with the Mercer theorem and kernel trick, results from functional analysis allowing us to use the newly introducd ideas of kernels with the previously introduces agorithm, with only light modifications.
 
@@ -101,11 +115,48 @@ Which shows that the scalar product does not depend on the choice of coefficient
   \end{aligned}
 \end{equation*}
 
-Now that we have shown the kernel trick as well as the existance of a corresponding Hilbert space, the next section will focus on studying the benefits of some chosen kernels that are often used in practical applications.
+Now that we have presented the kernel trick as well as the existence of a corresponding Hilbert space, the next section will focus on finding and creating useful kernels, as well as presenting some classical kernels.
 
 \subsection {Some useful kernels}
+
+We have defined in the last section what kernels are and how we can modify our algorithm to learn non-linear boundaries in our data. What we have omited so far is how is one supposed to choose develop or choose a kernel when facing a practical problem.
+
+In order to answer the previous question, we have to stop looking at kernels as a way to avoid heavy, or sometimes impossible, computations of a scalar product in some feature space. Instead of that, we look at the scalar product as a similarity measurement. Thus, the kernel trick can become a way to find the proper Hilbert space in which one's definition of similarity defines a scalar product, letting us then use the Support Vector Machine machinery as a way to train a classifier based on our definition of similarity.
+
+What do we mean by similarity? Let's first write down a more geometrical  definition of the euclidean scalar product in $\mathbb{R}^n$ 
+
+\begin{equation*}
+  \left<x, x'\right> = \|x\|\|x'\|\text{cos}\left(angle\left(x, x'\right)
+  \right)
+\end{equation*}
+
+This equivalent definition of the euclidean scalar product makes it more visible what the underlying notion of similarity of the euclidean scalar product is measured by the angle between the two vectors, scaled by their length. A similar kernel often used is the cosine similarity kernel, defined as
+
+\begin{equation*}
+  k\left(x, x'\right) = \frac{x^Tx'}{\|x\|\|x'\|} = \text{cos}\left(angle\left(x, x'\right)\right)
+\end{equation*}
+
+This notion of similarity will thus compare observations by first normalizing them to then compare the directions of the vectors. This similarity measure is often used in the context of text classification, where each entry of the vector corresponds to the number of occurences of a word in a text. The normalization will transform count of occurences in frequencies, thus having a similarity based on the relative importance of each word, independantly of the length of the text.
+
+Cosine similarity is an interesting similarity, but one natural way to reason about similarity of points is their distance from one another. The next kernel we introduce incorporates the notions of distance as a similarity measurement, is called the Radial Basis Function kernel and is defined as followed for some hyperparameter $\sigma \in \mathbb{R}$
+
+\begin{equation*}
+  k\left(x, x'\right) = \text{exp}\left(-\frac{\|x - x'\|^2}{\sigma^2}\right)
+\end{equation*}
+
+This kernel contains the idea that similarity between two observations should decay exponentially with the distance between the two vectors. This kernel isn't only a good model of our notion of similarity, but it also has interesting properties when used with the Support Vector Machines training algorithm.
+
+Let's first recall what was the decision function that was learned by the algorithm
+
+\begin{equation*}
+  f\left(x\right) = sgn\left(\sum_{x_i \text{ is SV}}\alpha_iy_ik\left(x, x_i\right) + b\right)
+\end{equation*}
+
+We evaluate the sign of a linear combination of the similarity of the current observation to the support vectors. One can see understand each support vector as a point of influence in the direction of the class it belongs to, with it's influence intensity exponentially decaying with the distance. The observation will then be classified by taking a weighted sum of the influence of each support vector and verifying if it is over or under some threshold $b$. This intuition can be visualised in figure X where we show the influence map built by two points on in a one dimensional space as well as a decision boundary learned using a radial basis function kernel.
+
+
 
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "learning_with_kernels"
-%% End:
+%%% End:
