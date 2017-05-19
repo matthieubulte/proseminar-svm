@@ -94,3 +94,5 @@ http://www.support-vector.net/
 http://www.svms.org/
 http://cs229.stanford.edu/notes/cs229-notes3.pdf
 http://www.svms.org/history.html
+
+https://www.csie.ntu.edu.tw/~cjlin/libsvm/

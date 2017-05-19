@@ -8,7 +8,7 @@
     \includegraphics[width=\linewidth]{decision_boundary.png}
   \end{minipage}
   \caption{
-    Left side shows on the vertical axis the influence level of the point on the 2d plane from two positive points drawn  with \textbf{x} markers and of one negative points marked with \textbf{o}. The right pane shows the contour levels of the decision function learned using an RBF kernel.
+    Left side shows on the vertical axis the influence level of the point on the 2d plane from two positive points drawn  with \textbf{x} markers and of one negative points marked with \textbf{o}. On the right pane, the solid line reprensents the decision boundary and the dashed lines represents the contour levels of the decision function with learned using an RBF kernel.
   }
 \end{figure*}
 
@@ -121,7 +121,30 @@ Now that we have presented the kernel trick as well as the existence of a corres
 
 We have defined in the last section what kernels are and how we can modify our algorithm to learn non-linear boundaries in our data. What we have omited so far is how is one supposed to choose develop or choose a kernel when facing a practical problem.
 
-In order to answer the previous question, we have to stop looking at kernels as a way to avoid heavy, or sometimes impossible, computations of a scalar product in some feature space. Instead of that, we look at the scalar product as a similarity measurement. Thus, the kernel trick can become a way to find the proper Hilbert space in which one's definition of similarity defines a scalar product, letting us then use the Support Vector Machine machinery as a way to train a classifier based on our definition of similarity.
+One first way to choose a kernel is by using existing knowledge about the shape the decision boundary should have. Let's recall the equation of the decision boundary defined by the learned parameters $w$ and $b$ using the kernel $k$
+
+\begin{equation*}
+  \mathscr{H} = \left\{x \in \mathbb{R}^n\ |\ k\left(w, x\right) + b = 0\right\}
+\end{equation*}
+
+For illustration, if we choose the kernel to be a polynomial kernel of degree $2$, meaning $k\left(x, x'\right) = \left(\left<x, x'\right> + 1\right)^2$, we can refine the definition of the decision boundary as the set of every $x \in \mathbb{R}^2$ for which following holds
+
+\begin{equation*}
+  \begin{aligned}
+    0 &=\ \left(\left<w, x\right> + 1\right)^2 + b\\
+      &=\ \left(w_1x_1 + w_2x_2 + 1\right)^2 + b\\
+      &=\ (w_1x_1)^2 + (w_2x_2)^2 + 2w_1x_1w_2x_2 + w_1x_1 + w_2x_2 + 1 + b\\
+      &=\ x^T\begin{bmatrix}w_1^2 & w_1w_2\\ w_1w_2 & w_2^2\end{bmatrix}x +
+    w^Tx + 1 
+  \end{aligned}
+\end{equation*}
+
+The decision boundary formed by this equation is called a quadric, the generalization of a conic section, which takes a shape from a known set of different kind of solutions. Thus, if one knows a quadric decision boundary is needed, then using a polynomial kernel of degree $2$ will learn the proper parameters of the quadric.
+
+We have seen how previous knowledge on the shape of the decision boundary can lead to the choice of a particular kernel. Unfortunately, it is often the case that the best kind of decision boundary can't be determined. Thankfully, there is still a way to use domain knowledge about the problem to choose a kernel that will best help training a performant classifier.
+
+
+In order to incorporate this other kind of domain knowledge, we have to look at kernels, not as the computations of a scalar product in some feature space, but as a similarity measurement. Taking this point of view, the kernel trick becomes a way to find the proper Hilbert space in which one's definition of similarity defines a scalar proper product, letting us use the Support Vector Machine machinery as a way to train a classifier based on our definition of similarity.
 
 What do we mean by similarity? Let's first write down a more geometrical  definition of the euclidean scalar product in $\mathbb{R}^n$ 
 
@@ -152,7 +175,7 @@ Let's first recall what was the decision function that was learned by the algori
   f\left(x\right) = sgn\left(\sum_{x_i \text{ is SV}}\alpha_iy_ik\left(x, x_i\right) + b\right)
 \end{equation*}
 
-We evaluate the sign of a linear combination of the similarity of the current observation to the support vectors. One can see understand each support vector as a point of influence in the direction of the class it belongs to, with it's influence intensity exponentially decaying with the distance. The observation will then be classified by taking a weighted sum of the influence of each support vector and verifying if it is over or under some threshold $b$. This intuition can be visualised in figure X where we show the influence map built by two points on in a one dimensional space as well as a decision boundary learned using a radial basis function kernel.
+We evaluate the sign of a linear combination of the similarity of the current observation to the support vectors. One can see understand each support vector as a point of influence in the direction of the class it belongs to, with it's influence intensity exponentially decaying with the distance. The observation will then be classified by taking a weighted sum of the influence of each support vector and verifying if it is over or under some threshold $b$. This intuition can be visualised in figure 2 where we show the influence map built by two points on in a one dimensional space as well as a decision boundary learned using a radial basis function kernel.
 
 
 
