@@ -124,6 +124,14 @@ The importance of this equality is twofold. First, it allows us to compute $b$ f
 
 Support vectors have a special role. Indeed, looking at (7), one notices that the hyperplane only is only dependent on the support vectors. All other observations vanish from the sum because of their null Lagrange coefficient. This means that all the information extracted from the training set was represented by the support vectors, and all other observations had no role in the training of the algorithm, thus have no role in defining the decision boundary between the two classes of observations.
 
+Furthermore, it can be shown that the amount support vectors give us an upper bound on the out of sample error of the classifier. This means that a low number of support vectors can is an indicator of the capacity of a classifier to generalize to unseen samples. The upper bound is following
+
+\begin{equation}
+  E\left[Pr\left(\text{error}\right)\right] \leq \frac{E\left[\text{number of support vectors}\right]}{\text{number of training observations}}
+\end{equation}
+
+This inequality allows us to quickly derive a simple estimation of the quality of the learned classifier by just looking at the number of support vector.
+
 \subsection{Towards SVMs}
 
 We have chose in this work to present a simplified version of support vector machines called the hard margin classifier. This was done in order to focus on building an intuition of the way support vectors machines work. In practice, several considerations have to be made in order to make this classifier usable. These points will be handled in the next paragraphs.
