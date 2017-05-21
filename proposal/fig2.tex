@@ -24,21 +24,21 @@
        node[pos_sv] (name) at (2,2){}
        node[solid,circle,minimum width=2.8ex,fill=none,thick,draw] (name) at (1.5,1.5){}
        node[pos_sv] (name) at (1.5,1.5){}
-       node [sloped, above, near start] {$\left<w, x\right> + b = 1$};
+       node [sloped, above, near start] {$w \cdot \mathbf{x} + b = 1$};
        
   % negative side
   \draw[dashed line, xshift=.7cm]
        (2.6,2.6) coordinate (ile) -- (.4,.4) coordinate (ils)
        node[solid,circle,minimum width=2.8ex,fill=none,thick,draw] (name) at (1,1){}
        node[neg_sv] (name) at (1.,1.){}
-       node [sloped, below, near start] {$w\cdot x + b = -1$};
+       node [sloped, below, near start] {$w\cdot \mathbf{x} + b = -1$};
 
   % margin
   \draw[important line]
        (.7,.7) coordinate (lines) -- (3,3) coordinate (linee);
 
   \draw[very thick,-] ($(sls) + (2,2)$) -- ($(sls) + (2.35,1.65)$)
-       node[sloped, above, midway] {$1/\|w\|$};
+       node[sloped, above, midway] {$\|w\|^{-1}$};
 
    \foreach \Point in {(.9,2.4), (1.3,2.5), (2,3), (1,2.9)}{
      \draw \Point node[neg_pt]{};
