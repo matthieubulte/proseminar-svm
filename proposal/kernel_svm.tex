@@ -14,7 +14,7 @@
 
 \section{Kernel methods}
 
-The previous section introduced the large margin classifier. The large margin classifier, as we saw, allows us the find the best seperating hyperplane between two linearly seperable classes of a dataset. In this section we introduce the concept of kernels, allowing us to learn non linear decision boudaries, continuing with the Mercer theorem and kernel trick, results from functional analysis allowing us to use the newly introducd ideas of kernels with the previously introduces agorithm, with only light modifications.
+The previous section introduced the linear SVM classifier. The linear SVM, as we saw, allows us the find the best seperating hyperplane between two linearly seperable classes of a dataset. In this section we introduce the concept of kernels, allowing us to learn non linear decision boudaries, continuing with the Mercer theorem and kernel trick, results from functional analysis allowing us to use the newly introducd ideas of kernels with the previously introduces agorithm, with only light modifications.
 
 \subsection{Non linearly separable data}
 
@@ -175,7 +175,6 @@ Let's first recall what was the decision function that was learned by the algori
 \end{equation*}
 
 We evaluate the sign of a linear combination of the similarity of the current observation to the support vectors. One can see understand each support vector as a point of influence in the direction of the class it belongs to, with it's influence intensity exponentially decaying with the distance. The observation will then be classified by taking a weighted sum of the influence of each support vector and verifying if it is over or under some threshold $b$. This intuition can be visualised in figure 2 where we show the influence map built by two points on in a one dimensional space as well as a decision boundary learned using a radial basis function kernel.
-
 
 
 %%% Local Variables:
