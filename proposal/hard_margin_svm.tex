@@ -3,7 +3,7 @@
 The hard margin classifier learns the parameters $w \in \mathbb{R}^n$ and $b \in \mathbb{R}$ of a hyperplane $\mathscr{H} \subset \mathbb{R}^n$, separating two classes of observations $\mathbf{x_i} \in \mathcal{X} \subset \mathbb{R}^n$. To train it, the algorithm takes a set of $m$ observations $\mathbf{x_i}$ together with a vector of labels $y_i = \pm 1$ for each of the observations:
 
 $$
-(\mathbf{x_1}, y_1), (\mathbf{x_2}, y_2), \dotsc, (\mathbf{x_m}, y_m)
+(\mathbf{x}_1, y_1), (\mathbf{x}_2, y_2), \dotsc, (\mathbf{x}_m, y_m)
 $$
 s
 The learned parameters are then used to define a decision function $f$, assigning to points of $\mathcal{X}$ a label $\pm 1$ corresponding to the side of the hyperplane on which the points stands:
@@ -17,7 +17,7 @@ The learned parameters are then used to define a decision function $f$, assignin
 One particularity about the learning algorithm used for SVMs is the objective function the algorithm tries to optimize. Other learning algorithms typically chose a loss function based on the empirical risk, defined as following for a function $f$ and a training set $(\mathbf{x}, \mathbf{y})$ of size $m$:
 
 \begin{equation}
-  R_{\text{emp}}[f] = \frac{1}{m}\sum^m_{i=1}\frac{1}{2}|f(\mathbf{x_i}) - y_i|
+  R_{\text{emp}}[f] = \frac{1}{m}\sum^m_{i=1}\frac{1}{2}|f(\mathbf{x}_i) - y_i|
 \end{equation}
 
 The margin maximization algorithm instead, searches within the space of hyperplanes properly classifying the training set, for the hyperplane with the largest distance from the training points to the hyperplane.
@@ -34,9 +34,9 @@ This idea translates well into the following optimization problem, trying to max
   \begin{aligned}
     &\underset{w \in \mathbb{R}^n, b \in \mathbb{R}} {\text{maximize}}
     & & M := \frac{1}{\|w\|} \left[\underset{i} {min}\ 
-    y_i(w \cdot \mathbf{x_i} + b)\right]\\
+    y_i(w \cdot \mathbf{x}_i + b)\right]\\
     &\text{subject to}
-    & &y_i(w \cdot \mathbf{x_i} + b) \ge M\ \text{for all}\ i = 1 \dotsc m
+    & &y_i(w \cdot \mathbf{x}_i + b) \ge M\ \text{for all}\ i = 1 \dotsc m
   \end{aligned}
 \end{equation}
 
@@ -51,7 +51,7 @@ We can thus reformulate the optimization problem into the following quadratic op
     &\underset{w \in \mathbb{R}^n, b \in \mathbb{R}} {\text{minimize}}
     & &\|w\|\\
     &\text{subject to}
-    & &y_i(w \cdot \mathbf{x_i} + b) \ge 1\ \text{for all}\ i = 1 \dotsc m
+    & &y_i(w \cdot \mathbf{x}_i + b) \ge 1\ \text{for all}\ i = 1 \dotsc m
   \end{aligned}
 \end{equation}
 
@@ -78,7 +78,7 @@ Although the previous formulation of the problem helped us to better understand 
 In order to get to these benefits, we introduce the Lagrangian $L$ together with Lagrange multipliers $\alpha_i \ge 0$:
 
 \begin{equation}
-  L(w, b, \boldsymbol{\alpha}) = \frac{1}{2}\|w\|^2 - \sum^m_{i=1} \alpha_i[y_i(w \cdot \mathbf{x_i} + b)) - 1]
+  L(w, b, \boldsymbol{\alpha}) = \frac{1}{2}\|w\|^2 - \sum^m_{i=1} \alpha_i[y_i(w \cdot \mathbf{x}_i + b)) - 1]
 \end{equation}
 
 This is called the dual formulation of our original optimization problem, called the primal problem, in which $w$ and $b$ are called primal variables, and $\boldsymbol{\alpha}$ the dual variable. It can be shown \textcolor[rgb]{1,0,0}{ref?} that the promal optimization problem is equivalent to finding a saddle point of $L$, minimizing with respect to $w$ and $b$, while maximizing it with respect to $
@@ -97,7 +97,7 @@ leading to
 \begin{equation}
   \sum^m_{i=1} \boldsymbol{\alpha}_iy_i = 0
   \ \text{and}\ 
-  w = \sum^m_{i=1} \alpha_iy_i\mathbf{x_i}
+  w = \sum^m_{i=1} \alpha_iy_i\mathbf{x}_i
 \end{equation}
 
 Further, by replacing $(7)$ and $(8)$ in the objective function $(6)$, we obtain an optimization problem free of primal variables, and end up only obtimizing against the vector $\boldsymbol{\alpha}$
@@ -116,7 +116,7 @@ Finally, the Karush-Kuhn-Tucker theorem states that the solution $\boldsymbol{\a
 \textcolor[rgb]{1,0,0}{ref?}
 
 \begin{equation}
-  \boldsymbol{\alpha}_i[y_i(w \cdot \mathbf{x_i} + b) - 1] = 0
+  \boldsymbol{\alpha}_i[y_i(w \cdot \mathbf{x}_i + b) - 1] = 0
 \end{equation}
 
 The importance of this equality is twofold. First, it allows us to compute $b$ from an observation $i$ for whichs $\boldsymbol{\alpha}_i \neq 0$. Second and most importantly, this equality implies that every observations not lying on the margin must have a vanishing Lagrangian coefficient. These special observations are called \textit{support vectors}.
@@ -124,7 +124,7 @@ The importance of this equality is twofold. First, it allows us to compute $b$ f
 Support vectors have a special role. Indeed, looking at (7), one notices that the hyperplane only is only dependent on the support vectors. All other observations vanish from the sum because of their null Lagrange coefficient. This means that all the information extracted from the training set was represented by the support vectors, and all other observations had no role in the training of the algorithm, thus have no role in defining the decision boundary between the two classes of observations. Thus the new decision function can be rewritten as following
 
 \begin{equation}
-  f(\mathbf{x}) = sgn\left(\sum_{\mathbf{x_i} \text{ is SV}}\alpha_iy_i\mathbf{x} \cdot \mathbf{x_i} + b\right)
+  f(\mathbf{x}) = sgn\left(\sum_{\mathbf{x}_i \text{ is SV}}\alpha_iy_i\mathbf{x} \cdot \mathbf{x}_i + b\right)
 \end{equation}
 
 Furthermore, it can be shown that the amount support vectors give us an upper bound on the out of sample error of the classifier. This means that a low number of support vectors can is an indicator of the capacity of a classifier to generalize to unseen samples. The upper bound is following
