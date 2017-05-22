@@ -1,6 +1,5 @@
 \section {Margin maximization classifier}
 
-
 The hard margin classifier learns the parameters $w \in \mathbb{R}^n$ and $b \in \mathbb{R}$ of a hyperplane $\mathscr{H} \subset \mathbb{R}^n$, separating two classes of observations $\mathbf{x_i} \in \mathcal{X} \subset \mathbb{R}^n$. To train it, the algorithm takes a set of $m$ observations $\mathbf{x_i}$ together with a vector of labels $y_i = \pm 1$ for each of the observations:
 
 $$
@@ -15,7 +14,7 @@ The learned parameters are then used to define a decision function $f$, assignin
 
 \subsection {Maximizating the margin}
 
-One particularity about the learning algorithm used for Support Vector Machines is the loss function the algorithm tries to optimize. Other learning algorithms typically chose a loss function based on the empirical risk, defined as following for a function $f$ and a training set $(\mathbf{x}, \mathbf{y})$ of size $m$:
+One particularity about the learning algorithm used for SVMs is the objective function the algorithm tries to optimize. Other learning algorithms typically chose a loss function based on the empirical risk, defined as following for a function $f$ and a training set $(\mathbf{x}, \mathbf{y})$ of size $m$:
 
 \begin{equation}
   R_{\text{emp}}[f] = \frac{1}{m}\sum^m_{i=1}\frac{1}{2}|f(\mathbf{x_i}) - y_i|
@@ -74,7 +73,7 @@ We can thus reformulate the optimization problem into the following quadratic op
 
 \subsection {Support vectors}
 
-Although the previous formulation of the problem helped us to better understand the ideas of support vector machines, the resulting quadratic problem will become impractical when later introducing kernels methods. We will introduce in this section an equivalent formulation of the optimization problem (4) that will not only solve computational issues, but will also give us more insights about the resulting solution.
+Although the previous formulation of the problem helped us to better understand the ideas of SVMs, the resulting quadratic problem will become impractical when later introducing kernels methods. We will introduce in this section an equivalent formulation of the optimization problem (4) that will not only solve computational issues, but will also give us more insights about the resulting solution.
 
 In order to get to these benefits, we introduce the Lagrangian $L$ together with Lagrange multipliers $\alpha_i \ge 0$:
 
@@ -138,7 +137,7 @@ This inequality allows us to quickly derive a simple estimation of the quality o
 
 \subsection{Towards SVMs}
 
-We have chose in this work to present a simplified version of support vector machines called the hard margin classifier. This was done in order to focus on building an intuition of the way support vectors machines work. In practice, several considerations have to be made in order to make this classifier usable. These points will be handled in the next paragraphs.
+We have chose in this work to present a simplified version of SVMs called the hard margin classifier. This was done in order to focus on building an intuition of the way SVMs work. In practice, several considerations have to be made in order to make this classifier usable. These points will be handled in the next paragraphs.
 
 The most important addition to the margin maximization algorithm that we have omited so far is the ability to train on a non linearly separable dataset caused by noise is the observations. Indeed, real world datasets are often generated from measuring physical phenomena. This kind of dataset is subject to noise that can cause an overlapping of the two classes around the decision boundary. Thankfully, these issues can be mitigated by introducing slack variables that will compensate the offset of an observation in the direction of the other class. A thorough investigation of this method can be found in \textcolor[rgb]{1,0,0}{ref?}.
 

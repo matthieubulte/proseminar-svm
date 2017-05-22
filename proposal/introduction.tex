@@ -2,13 +2,15 @@
 
 Machine learning can be seen as the science of automatically finding regularities or patterns in data. The contribution from many fields of science, engineering and mathematics brought a large variety of approaches to solving this problem.
 
-In this work, we will bring our attention to the subject of kernel algorithms with a focus on support vector machines. While most of the focus nowadays goes into neural networks, support vector machine stays a relevant algorithm with useful theoretical, but also practical properties that we will study.
+In this work, we will bring our attention to the subject of kernel algorithms with a focus on Support Vector Machines (SVM). While most of the focus nowadays goes into neural networks, SVM stays a relevant algorithm with useful theoretical, but also practical properties that we will study.
 
-The first section will focus on presenting on a simplified version of the suppor vector machine: the hard margin classifier. We will show how the algorithm constructs the optimal hyperplane for separating two classes of observations. This will help construct the necessary intuition to understand classical extensions to the algorithm as well as the kernelization of the algorithm.
+The problem that we are trying to solve is the one of learning the decision function telling to which of two classes a point belongs for any point of the space points we are studying. More specifically, we are focusing on learning a linear classifier, a kind of classifier assigning a class to each point based on which side of a learned hyperplane the point lies, where a hyperplane is a generalization of a plane in three dimensions to an arbitrary high dimensional space.
+
+The first section will focus on presenting on a simplified version of the SVM: the hard margin classifier. We will show how the algorithm constructs the optimal hyperplane for separating two classes of observations. This will help construct the necessary intuition to understand classical extensions to the algorithm as well as the kernelization of the algorithm.
 
 In the second second, we will study kernel methods and the kernel trick. A method for working with a projection of the data in a higher dimensional space without having to pay the computational cost of applying the projection. We will concluse the section with an overview of different kernels, an discuss how kernels helps us to incroporate domain knowledge to the learned classifier.
 
-We will then conclude this paper with an overview of practical challenges that can be found while using support vector machines on modern data sets, and mention interesting extensions to support vector machines that were added in the 50 years of their existence.
+We will then conclude this paper with an overview of practical challenges that can be found while using SVMs on modern data sets, and mention interesting extensions to support vector machines that were added in the 50 years of their existence.
 
 %%% Local Variables:
 %%% mode: latex
