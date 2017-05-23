@@ -1,11 +1,11 @@
 \section {Margin maximization classifier}
 
-The hard margin classifier learns the parameters $w \in \mathbb{R}^n$ and $b \in \mathbb{R}$ of a hyperplane $\mathscr{H} \subset \mathbb{R}^n$, separating two classes of observations $\mathbf{x_i} \in \mathcal{X} \subset \mathbb{R}^n$. To train it, the algorithm takes a set of $m$ observations $\mathbf{x_i}$ together with a vector of labels $y_i = \pm 1$ for each of the observations:
+The hard margin classifier learns the parameters $w \in \mathbb{R}^n$ and $b \in \mathbb{R}$ of a hyperplane $\mathscr{H} := \left\{ \mathbf{x} \in \mathbb{R}^n\ |\ w \cdot \mathbf{x} + b = 0\right\}$, separating two classes of observations $\mathbf{x_i} \in \mathcal{X} \subset \mathbb{R}^n$. To train it, the algorithm takes a set of $m$ observations $\mathbf{x_i}$ together with a vector of labels $y_i = \pm 1$ for each of the observations indicating to which class belongs each observation 
 
-$$
+\begin{equation*}
 (\mathbf{x}_1, y_1), (\mathbf{x}_2, y_2), \dotsc, (\mathbf{x}_m, y_m)
-$$
-s
+\end{equation*}
+
 The learned parameters are then used to define a decision function $f$, assigning to points of $\mathcal{X}$ a label $\pm 1$ corresponding to the side of the hyperplane on which the points stands:
 
 \begin{equation}
@@ -14,7 +14,7 @@ The learned parameters are then used to define a decision function $f$, assignin
 
 \subsection {Maximizating the margin}
 
-One particularity about the learning algorithm used for SVMs is the objective function the algorithm tries to optimize. Other learning algorithms typically chose a loss function based on the empirical risk, defined as following for a function $f$ and a training set $(\mathbf{x}, \mathbf{y})$ of size $m$:
+One particularity about the learning algorithm used for SVMs is the objective function the algorithm tries to optimize. Other learning algorithms typically chose a loss function based on the empirical risk, defined as following for a classifier $f$ and a training set $(\mathbf{x}, \mathbf{y})$ of size $m$:
 
 \begin{equation}
   R_{\text{emp}}[f] = \frac{1}{m}\sum^m_{i=1}\frac{1}{2}|f(\mathbf{x}_i) - y_i|
