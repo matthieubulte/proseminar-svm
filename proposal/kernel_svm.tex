@@ -1,12 +1,12 @@
 \section{Kernel methods}
 
-The previous section introduced the linear SVM classifier. As we have seen, the linear SVM  allows us the find the best seperating hyperplane between two linearly seperable classes of observations. In this section we introduce the concept of kernels, allowing us to learn non linear decision boundaries, continuing with Mercer's theorem and the kernel trick, results from functional analysis allowing us to use the newly introduced ideas of kernels with the previously presented agorithm, with only light modifications.
+The previous section introduced the linear SVM classifier. As we have seen, the linear SVM  allows us the find the best separating hyperplane between two linearly separable classes of observations. In this section we introduce the concept of kernels, allowing us to learn non linear decision boundaries, continuing with Mercer's theorem and the kernel trick, results from functional analysis allowing us to use the newly introduced ideas of kernels with the previously presented algorithm, with only light modifications.
 
 \subsection{Non linearly separable data}
 
 Very often, the decision boundary one is trying to learn is in its nature non-linear. One method that is often used to make an hyperplane learning algorithm learn a non-linear decision boundary is to first map the dataset to another space using a non linear transformation. The learned boundary is then linear in the mapped space, but because the chosen projection is not linear, the pre-image of the decision boundary is not linear.
 
-This approach is very simple to implement and only requires light modifications the presented algorithm. Let $\phi : \mathbb{R}^n \rightarrow \mathcal{V}$ be a non linear transformation to a pre-Hilbert space $\mathcal{V}$. A pre-Hilbert space is a generalization of an Euclidean space, the geometrical space we are used to. Saying that the image of the projection should be a pre-Hilbert space simply means that the image set is equiped with a scalar product, needed for our training algorithm. We can now modify the previously introduced algorithm by replacing simply every dot product by the scalar product on the projected points in the $\mathcal{V}$ space, namely $\langle \phi(\cdot), \phi(\cdot)\rangle _{\mathcal{V}}$.
+This approach is very simple to implement and only requires light modifications the presented algorithm. Let $\phi : \mathbb{R}^n \rightarrow \mathcal{V}$ be a non linear transformation to a pre-Hilbert space $\mathcal{V}$. A pre-Hilbert space is a generalization of an Euclidean space, the geometrical space we are used to. Saying that the image of the projection should be a pre-Hilbert space simply means that the image set is equipped with a scalar product, needed for our training algorithm. We can now modify the previously introduced algorithm by replacing simply every dot product by the scalar product on the projected points in the $\mathcal{V}$ space, namely $\langle \phi(\cdot), \phi(\cdot)\rangle _{\mathcal{V}}$.
 
 In order to better understand kernels and the kernel trick, let's analyze the example of polynomial projection of degree $d$, in which every point is projected to a vector containing every monomial of degree $d$. For instance, choosing $d = 2$ together with a $2$ dimensional input space leads to the projection $\phi : \mathbb{R}^2 \rightarrow \mathbb{R}^4$ defined as
 
@@ -14,7 +14,7 @@ In order to better understand kernels and the kernel trick, let's analyze the ex
     \phi(x_1, x_2) \mapsto (x_1^2, x_2^2, x_1x_2, x_2x_1)
 \end{equation*}
 
-This projection, while adding more separation capabilities has the problem that the dimesion of the image space grows at an exponential rate together with $d$, making the choice of a larger $d$ prohibitivly expensive. Though, the margin maximization algorithm only uses the scalar product of the observations in the feature space, which is simply the dot product of the mapped vectors. The following equations show that the projection in the higher dimensional space is not required to the computation of the scalar product, and can be replaced by a function of the two vectors in the original space
+This projection, while adding more separation capabilities has the problem that the dimension of the image space grows at an exponential rate together with $d$, making the choice of a larger $d$ prohibitively expensive. Though, the margin maximization algorithm only uses the scalar product of the observations in the feature space, which is simply the dot product of the mapped vectors. The following equations show that the projection in the higher dimensional space is not required to the computation of the scalar product, and can be replaced by a function of the two vectors in the original space
 
 \begin{equation*}
   \begin{aligned}
@@ -50,13 +50,13 @@ Let $k :\mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$ with $k(x, x') 
     \end{aligned}
   \end{equation*}
 
-\item \textit{Positive definitness} Positive definitness of a kernel is a stronger property than the one required for the positive definiteness in the features space. A kernel is said to be positive definite if for every $\alpha_1, ..., \alpha_n \in \mathbb{R}$ following inequality holds
+\item \textit{Positive definiteness} Positive definiteness of a kernel is a stronger property than the one required for the positive definiteness in the features space. A kernel is said to be positive definite if for every $\alpha_1, ..., \alpha_n \in \mathbb{R}$ following inequality holds
   \begin{equation*}
     \sum_{i,j=1}^n\alpha_i\alpha_jk\left(x_i, x_j\right) \geq 0
   \end{equation*}
 \end{itemize}
 
-We will show by construction, that these properties are sufficient to the proof of the existence of the desired space. The literature contains several examples of vector spaces and projections with the desired property. We will here proove the existence of such a space by construction.
+We will show by construction, that these properties are sufficient to the proof of the existence of the desired space. The literature contains several examples of vector spaces and projections with the desired property. We will here prove the existence of such a space by construction.
 
 Let $k : \mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$ be symmetrical and positive definite, and $\mathbb{R}^{(\mathbb{R}^n)}$ be the set of functions from $\mathbb{R}^n$ to $\mathbb{R}$. We define the reproducing kernel map as follow
 
@@ -78,7 +78,7 @@ We now show how the mapped observations of the training set $\left\{k\left(\cdot
   \end{aligned}
 \end{equation*}
 
-Positive definitness, bilinearity and symmetry can all be trivially derived from the definition of this scalar product together with the symmetry and positive definitness of the kernel function. The attentive reader will have notices that the functions $\left\{k\left(\cdot, x_1\right), ..., k\left(\cdot, x_n\right)\right\}$ must nost necessarily be linearly independant, leading to a non unique mapping from $f$ to the coefficients $\alpha_1, ..., \alpha_n$. To see that this doesn't imply the ill-definitness of the defined scalar product, we note that
+Positive definiteness, bilinearity and symmetry can all be trivially derived from the definition of this scalar product together with the symmetry and positive definiteness of the kernel function. The attentive reader will have notices that the functions $\left\{k\left(\cdot, x_1\right), ..., k\left(\cdot, x_n\right)\right\}$ must not necessarily be linearly independent, leading to a non unique mapping from $f$ to the coefficients $\alpha_1, ..., \alpha_n$. To see that this doesn't imply the ill-definiteness of the defined scalar product, we note that
 
 \begin{equation*}
   \langle f, g\rangle = \sum_{j=1}^n\beta_j f\left(\mathbf{x}_j\right)
@@ -111,13 +111,13 @@ Now that we have presented the kernel trick as well as the existence of a corres
     \includegraphics[width=\linewidth]{decision_boundary.png}
   \end{minipage}
   \caption{
-    Left side shows on the vertical axis the influence level of the point on the 2d plane from two positive points drawn  with \textbf{x} markers and of one negative points marked with \textbf{o}. On the right pane, the solid line reprensents the decision boundary and the dashed lines represents the contour levels of the decision function with learned using an RBF kernel.
+    Left side shows on the vertical axis the influence level of the point on the 2d plane from two positive points drawn  with \textbf{x} markers and of one negative points marked with \textbf{o}. On the right pane, the solid line represents the decision boundary and the dashed lines represents the contour levels of the decision function with learned using an RBF kernel.
   }
 \end{figure*}
 
 \subsection {Some useful kernels}
 
-We have defined in the last section what kernels are and how we can modify our algorithm to learn non-linear boundaries in our data. What we have omited so far is how is one supposed to choose develop or choose a kernel when facing a practical problem.
+We have defined in the last section what kernels are and how we can modify our algorithm to learn non-linear boundaries in our data. What we have omitted so far is how is one supposed to choose develop or choose a kernel when facing a practical problem.
 
 One first way to choose a kernel is by using existing knowledge about the shape the decision boundary should have. Let's recall the equation of the decision boundary defined by the learned parameters using the kernel $k$
 
@@ -156,7 +156,7 @@ This equivalent definition of the euclidean scalar product makes it more visible
   k(\mathbf{x}, \mathbf{\tilde{x}}) = \frac{\mathbf{x} \cdot \mathbf{\tilde{x}}}{\|\mathbf{x}\|\|\mathbf{\tilde{x}}\|} = \text{cos}\left(angle\left(\mathbf{x}, \mathbf{\tilde{x}}\right)\right)
 \end{equation*}
 
-This notion of similarity will thus compare observations by first normalizing them to then compare the directions of the vectors. This similarity measure is often used in the context of text classification, where each entry of the vector corresponds to the number of occurences of a word in a text. The normalization will transform count of occurences in frequencies, thus having a similarity based on the relative importance of each word, independantly of the length of the text.
+This notion of similarity will thus compare observations by first normalizing them to then compare the directions of the vectors. This similarity measure is often used in the context of text classification, where each entry of the vector corresponds to the number of occurences of a word in a text. The normalization will transform count of occurences in frequencies, thus having a similarity based on the relative importance of each word, independently of the length of the text.
 
 Cosine similarity is an interesting similarity, but one natural way to reason about similarity of points is their distance from one another. The next kernel we introduce incorporates the notions of distance as a similarity measurement, is called the Radial Basis Function kernel and is defined as followed for some hyperparameter $\sigma \in \mathbb{R}$
 
@@ -172,9 +172,9 @@ Let's first recall what was the decision function that was learned by the algori
   f\left(x\right) = sgn\left(\sum_{\mathbf{x}_i \text{ is SV}}\alpha_iy_ik\left(\mathbf{x}, \mathbf{x}_i\right) + b\right)
 \end{equation*}
 
-We evaluate the sign of a linear combination of the similarity of the current observation to the support vectors. One can see understand each support vector as a point of influence in the direction of the class it belongs to, with it's influence intensity exponentially decaying with the distance. The observation will then be classified by taking a weighted sum of the influence of each support vector and verifying if it is over or under some threshold $b$. This intuition can be visualised in figure 2 where we show the influence map built by two points on in a one dimensional space as well as a decision boundary learned using a radial basis function kernel.
+We evaluate the sign of a linear combination of the similarity of the current observation to the support vectors. One can see understand each support vector as a point of influence in the direction of the class it belongs to, with it's influence intensity exponentially decaying with the distance. The observation will then be classified by taking a weighted sum of the influence of each support vector and verifying if it is over or under some threshold $b$. This intuition can be visualized in figure 2 where we show the influence map built by two points on in a one dimensional space as well as a decision boundary learned using a radial basis function kernel.
 
-We have shown with three examples how previous knowledge can help train high quality classifiers. Because we had to omit many interesting concepts of choice of kernel, the reader is invited to consult further resources to learn about more mechanical ways to construct kernels \textcolor[rgb]{1,0,0}{ref linear combination, partial kernels...} but also about invariance incorporation \textcolor[rgb]{1,0,0}{ref} or advanced approach in kernel design for solving modern complex problems \textcolor[rgb]{1,0,0}{ref}.
+We have shown with three examples how previous knowledge can help train high quality classifiers. Because we had to omit many interesting concepts of choice of kernel, the reader is invited to consult further resources to learn about more mechanical ways to construct kernels \textcolor[rgb]{1,0,0}{ref linear combination, partial kernels...} but also about invariane incorporation \textcolor[rgb]{1,0,0}{ref} or advanced approach in kernel design for solving modern complex problems \textcolor[rgb]{1,0,0}{ref}.
 
 %%% Local Variables:
 %%% mode: latex
