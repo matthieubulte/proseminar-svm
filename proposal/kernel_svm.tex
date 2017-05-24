@@ -1,3 +1,18 @@
+\begin{figure*}
+  \begin{minipage}{.5\textwidth}
+    \centering
+    \input{fig3}
+    %\includegraphics[width=\linewidth]{influence_map.png}
+  \end{minipage}%
+  \begin{minipage}{.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{decision_boundary.png}
+  \end{minipage}
+  \caption{
+    Le left pane illustrates how a non linear projection in a higher dimensional space makes $(1)$ it possible to learn non linear decisions boundaries in the observations space by projecting back the learned linear decision boundary $(2)$. On the right pane, the solid line represents the decision boundary and the dashed lines represents the contour levels of the decision function with learned using an RBF kernel.
+  }
+\end{figure*}
+
 \section{Kernel methods}
 
 The previous section introduced the linear SVM classifier. As we have seen, the linear SVM  allows us the find the best separating hyperplane between two linearly separable classes of observations. In this section we introduce the concept of kernels, allowing us to learn non linear decision boundaries, continuing with Mercer's theorem and the kernel trick, results from functional analysis allowing us to use the newly introduced ideas of kernels with the previously presented algorithm, with only light modifications.
@@ -8,17 +23,18 @@ Very often, the decision boundary one is trying to learn is in its nature non-li
 
 This approach is very simple to implement and only requires light modifications the presented algorithm. Let $\phi : \mathbb{R}^n \rightarrow \mathcal{V}$ be a non linear transformation to a pre-Hilbert space $\mathcal{V}$. A pre-Hilbert space is a generalization of an Euclidean space, the geometrical space we are used to. Saying that the image of the projection should be a pre-Hilbert space simply means that the image set is equipped with a scalar product, needed for our training algorithm. We can now modify the previously introduced algorithm by replacing simply every dot product by the scalar product on the projected points in the $\mathcal{V}$ space, namely $\langle \phi(\cdot), \phi(\cdot)\rangle _{\mathcal{V}}$.
 
-In order to better understand kernels and the kernel trick, let's analyze the example of polynomial projection of degree $d$, in which every point is projected to a vector containing every monomial of degree $d$. For instance, choosing $d = 2$ together with a $2$ dimensional input space leads to the projection $\phi : \mathbb{R}^2 \rightarrow \mathbb{R}^4$ defined as
+In order to better understand kernels and the kernel trick, let's analyze the example of polynomial projection of degree $d$, in which every point is projected to a vector containing every monomial of degree $d$. For instance, choosing $d = 2$ together with a $2$ dimensional input space leads to the projection $\phi : \mathbb{R}^2 \rightarrow \mathbb{R}^3$ defined as
 
 \begin{equation*}
-    \phi(x_1, x_2) \mapsto (x_1^2, x_2^2, x_1x_2, x_2x_1)
+    \phi(x_1, x_2) \mapsto (x_1^2, x_2^2, \sqrt{2}x_1x_2)
 \end{equation*}
 
-This projection, while adding more separation capabilities has the problem that the dimension of the image space grows at an exponential rate together with $d$, making the choice of a larger $d$ prohibitively expensive. Though, the margin maximization algorithm only uses the scalar product of the observations in the feature space, which is simply the dot product of the mapped vectors. The following equations show that the projection in the higher dimensional space is not required to the computation of the scalar product, and can be replaced by a function of the two vectors in the original space
+This projection, illustrated in figure 2, makes it possible to learn a decision boundary that is not linear in the observations but it has the problem that the dimension of the image space grows at an exponential rate together with $d$, making the choice of a larger $d$ prohibitively expensive. Though, the margin maximization algorithm only uses the scalar product of the observations in the feature space, which is simply the dot product of the mapped vectors. The following equations show that the projection in the higher dimensional space is not required to the computation of the scalar product, and can be replaced by a function of the two vectors in the original space
 
 \begin{equation*}
   \begin{aligned}
     \phi(x) \cdot \phi(\tilde{x})
+    &= x_1^2\tilde{x}_1^2 + x_2^2\tilde{x}_2^2 + \sqrt{2}x_1x_2\sqrt{2}\tilde{x}_1\tilde{x}_2\\
     &= x_1^2\tilde{x}_1^2 + x_2^2\tilde{x}_2^2 + 2x_1x_2\tilde{x}_1\tilde{x}_2\\
     &= \left(x \cdot \tilde{x}\right)^2 \\
     &=: k(x, \tilde{x})
@@ -101,20 +117,6 @@ Which shows that the scalar product does not depend on the choice of coefficient
 
 Now that we have presented the kernel trick as well as the existence of a corresponding pre-Hilbert space, the next section will focus on finding and creating useful kernels, as well as presenting some classical kernels.
 
-\begin{figure*}
-  \begin{minipage}{.5\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{influence_map.png}
-  \end{minipage}%
-  \begin{minipage}{.5\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{decision_boundary.png}
-  \end{minipage}
-  \caption{
-    Left side shows on the vertical axis the influence level of the point on the 2d plane from two positive points drawn  with \textbf{x} markers and of one negative points marked with \textbf{o}. On the right pane, the solid line represents the decision boundary and the dashed lines represents the contour levels of the decision function with learned using an RBF kernel.
-  }
-\end{figure*}
-
 \subsection {Some useful kernels}
 
 We have defined in the last section what kernels are and how we can modify our algorithm to learn non-linear boundaries in our data. What we have omitted so far is how is one supposed to choose develop or choose a kernel when facing a practical problem.
@@ -172,7 +174,7 @@ Let's first recall what was the decision function that was learned by the algori
   f\left(x\right) = sgn\left(\sum_{\mathbf{x}_i \text{ is SV}}\alpha_iy_ik\left(\mathbf{x}, \mathbf{x}_i\right) + b\right)
 \end{equation*}
 
-We evaluate the sign of a linear combination of the similarity of the current observation to the support vectors. One can see understand each support vector as a point of influence in the direction of the class it belongs to, with it's influence intensity exponentially decaying with the distance. The observation will then be classified by taking a weighted sum of the influence of each support vector and verifying if it is over or under some threshold $b$. This intuition can be visualized in figure 2 where we show the influence map built by two points on in a one dimensional space as well as a decision boundary learned using a radial basis function kernel.
+We evaluate the sign of a linear combination of the similarity of the current observation to the support vectors. One can see understand each support vector as a point of influence in the direction of the class it belongs to, with it's influence intensity exponentially decaying with the distance. The observation will then be classified by taking a weighted sum of the influence of each support vector and verifying if it is over or under some threshold $b$.
 
 We have shown with three examples how previous knowledge can help train high quality classifiers. Because we had to omit many interesting concepts of choice of kernel, the reader is invited to consult further resources to learn about more mechanical ways to construct kernels \textcolor[rgb]{1,0,0}{ref linear combination, partial kernels...} but also about invariane incorporation \textcolor[rgb]{1,0,0}{ref} or advanced approach in kernel design for solving modern complex problems \textcolor[rgb]{1,0,0}{ref}.
 
