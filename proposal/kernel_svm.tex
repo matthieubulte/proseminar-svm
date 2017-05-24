@@ -1,3 +1,106 @@
+\section{Kernel methods}
+
+The previous section introduced the linear SVM classifier. As we have seen, the linear SVM  allows us the find the best seperating hyperplane between two linearly seperable classes of observations. In this section we introduce the concept of kernels, allowing us to learn non linear decision boundaries, continuing with Mercer's theorem and the kernel trick, results from functional analysis allowing us to use the newly introduced ideas of kernels with the previously presented agorithm, with only light modifications.
+
+\subsection{Non linearly separable data}
+
+Very often, the decision boundary one is trying to learn is in its nature non-linear. One method that is often used to make an hyperplane learning algorithm learn a non-linear decision boundary is to first map the dataset to another space using a non linear transformation. The learned boundary is then linear in the mapped space, but because the chosen projection is not linear, the pre-image of the decision boundary is not linear.
+
+This approach is very simple to implement and only requires light modifications the presented algorithm. Let $\phi : \mathbb{R}^n \rightarrow \mathcal{V}$ be a non linear transformation to a pre-Hilbert space $\mathcal{V}$. A pre-Hilbert space is a generalization of an Euclidean space, the geometrical space we are used to. Saying that the image of the projection should be a pre-Hilbert space simply means that the image set is equiped with a scalar product, needed for our training algorithm. We can now modify the previously introduced algorithm by replacing simply every dot product by the scalar product on the projected points in the $\mathcal{V}$ space, namely $\langle \phi(\cdot), \phi(\cdot)\rangle _{\mathcal{V}}$.
+
+In order to better understand kernels and the kernel trick, let's analyze the example of polynomial projection of degree $d$, in which every point is projected to a vector containing every monomial of degree $d$. For instance, choosing $d = 2$ together with a $2$ dimensional input space leads to the projection $\phi : \mathbb{R}^2 \rightarrow \mathbb{R}^4$ defined as
+
+\begin{equation*}
+    \phi(x_1, x_2) \mapsto (x_1^2, x_2^2, x_1x_2, x_2x_1)
+\end{equation*}
+
+This projection, while adding more separation capabilities has the problem that the dimesion of the image space grows at an exponential rate together with $d$, making the choice of a larger $d$ prohibitivly expensive. Though, the margin maximization algorithm only uses the scalar product of the observations in the feature space, which is simply the dot product of the mapped vectors. The following equations show that the projection in the higher dimensional space is not required to the computation of the scalar product, and can be replaced by a function of the two vectors in the original space
+
+\begin{equation*}
+  \begin{aligned}
+    \phi(x) \cdot \phi(\tilde{x})
+    &= x_1^2\tilde{x}_1^2 + x_2^2\tilde{x}_2^2 + 2x_1x_2\tilde{x}_1\tilde{x}_2\\
+    &= \left(x \cdot \tilde{x}\right)^2 \\
+    &=: k(x, \tilde{x})
+  \end{aligned}
+\end{equation*}
+
+We call $k(\cdot, \cdot) : \mathbb{R}^2 \times \mathbb{R}^2 \rightarrow \mathbb{R}$ the kernel representation of the scalar product in the space $\phi(\mathbb{R}^2)$. One can show that such a function exists for any polynomial degree $d$, making the computation of the scalar product in the $d$-th monomial space as trivial as computing the scalar product in the original space.
+
+\subsection{Kernel trick}
+
+We have seen in the previous example, that it is sometimes possible to find a function $k :\mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$ with $k(x, x') = \langle \phi(x), \phi(x')\rangle _{\mathcal{V}}$ for some projection $\phi : \mathbb{R}^n \rightarrow \mathcal{V}$. With these special functions, it is possible by only lightly modifying our original algorithm to run the learning algorithm in another pre Hilbert space without the computational cost of projecting our data in this other space. This is called the kernel trick.
+
+We will now change our point of view, and try to define the properties defining the class of functions being the representation of a scalar product of the projection of its inputs in another vector space. This means, which properties must hold for $k$ in order for a $\phi$ to exist with the reproducing property.
+
+Let $k :\mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$ with $k(x, x') = \langle \phi(x), \phi(x')\rangle _{\mathcal{V}}$ for some projection $\mathbb{R}^n \rightarrow \mathcal{V}$, because $\langle \cdot, \cdot\rangle _{\mathcal{V}}$ is a scalar product, the following properties must hold
+
+\begin{itemize}
+\item \textit{Symmetry}
+  \begin{equation*}
+    \begin{aligned}
+      & \forall y_1, y_2 \in \mathcal{V}.\ 
+      \langle y_1, y_2\rangle _{\mathcal{V}} = \overline{\langle y_2, y_1\rangle _{\mathcal{V}}} & \Rightarrow\\
+      & \forall y_1, y_2 \in \phi(\mathbb{R}^n).\ 
+      \langle y_1, y_2\rangle _{\mathcal{V}} = \overline{\langle y_2, y_1\rangle _{\mathcal{V}}} & \Rightarrow\\
+      &\forall x_1, x_2 \in \mathbb{R}^n.\ 
+      \langle \phi(x_1), \phi(x_2)\rangle _{\mathcal{V}} = \overline{\langle \phi(x_2), \phi(x_1)\rangle _{\mathcal{V}}} &\Rightarrow\\
+      &\forall x_1, x_2 \in \mathbb{R}^n.\ 
+         k\left(x_1, x_2\right) = \overline{k\left(x_2, x_1\right)}
+    \end{aligned}
+  \end{equation*}
+
+\item \textit{Positive definitness} Positive definitness of a kernel is a stronger property than the one required for the positive definiteness in the features space. A kernel is said to be positive definite if for every $\alpha_1, ..., \alpha_n \in \mathbb{R}$ following inequality holds
+  \begin{equation*}
+    \sum_{i,j=1}^n\alpha_i\alpha_jk\left(x_i, x_j\right) \geq 0
+  \end{equation*}
+\end{itemize}
+
+We will show by construction, that these properties are sufficient to the proof of the existence of the desired space. The literature contains several examples of vector spaces and projections with the desired property. We will here proove the existence of such a space by construction.
+
+Let $k : \mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$ be symmetrical and positive definite, and $\mathbb{R}^{(\mathbb{R}^n)}$ be the set of functions from $\mathbb{R}^n$ to $\mathbb{R}$. We define the reproducing kernel map as follow
+
+\begin{equation}
+  \begin{aligned}
+    \phi : \mathbb{R}^n \rightarrow \mathcal{H}\\
+    \mathbf{x} \mapsto k(\cdot, \mathbf{x})
+  \end{aligned}
+\end{equation}
+
+We now show how the mapped observations of the training set $\left\{k\left(\cdot, \mathbf{x}_1\right), ..., k\left(\cdot, \mathbf{x}_n\right)\right\}$ spans a Hilbert space in which the reproducing property hold with the scalar product defined on the span set $\langle k\left(\cdot, \mathbf{x}_i\right), k\left(\cdot, \mathbf{x}_j\right)\rangle = k\left(\mathbf{x}_i, \mathbf{x}_j\right)$ and its canonical derivation for the spanned space
+
+\begin{equation*}
+  \begin{aligned}
+    \langle f, g\rangle 
+    &= \langle \sum_{i=1}^n\alpha_ik(\cdot, \mathbf{x}_i), \sum_{j=1}^n\beta_jk(\cdot, \mathbf{x}_j)\rangle \\
+    &= \sum_{i,j=1}^n\alpha_i\beta_j \langle k\left(\cdot, \mathbf{x}_i\right), k\left(\cdot, \mathbf{x}_j\right)\rangle \\
+    &= \sum_{i,j=1}^n\alpha_i\beta_j k\left(\mathbf{x}_i, \mathbf{x}_j\right)
+  \end{aligned}
+\end{equation*}
+
+Positive definitness, bilinearity and symmetry can all be trivially derived from the definition of this scalar product together with the symmetry and positive definitness of the kernel function. The attentive reader will have notices that the functions $\left\{k\left(\cdot, x_1\right), ..., k\left(\cdot, x_n\right)\right\}$ must nost necessarily be linearly independant, leading to a non unique mapping from $f$ to the coefficients $\alpha_1, ..., \alpha_n$. To see that this doesn't imply the ill-definitness of the defined scalar product, we note that
+
+\begin{equation*}
+  \langle f, g\rangle = \sum_{j=1}^n\beta_j f\left(\mathbf{x}_j\right)
+\end{equation*}
+
+and by symmetry
+
+\begin{equation*}
+  \langle f, g\rangle = \langle g, f\rangle = \sum_{i=1}^n\alpha_i g\left(\mathbf{x}_i\right)
+\end{equation*}
+
+Which shows that the scalar product does not depend on the choice of coefficients for the functions $f$ or $g$ confirming the scalar product is well defined. Thus, the previously defined scalar product, together with the norm $\|f\| = \sqrt{\langle f, f\rangle }$ define a valid Hilbert space and the reproducing property holds
+
+\begin{equation*}
+  \begin{aligned}
+    \langle \phi(\mathbf{x}_i), \phi(\mathbf{x}_j)\rangle =\ &\langle k\left(\cdot, \mathbf{x}_i\right), k\left(\cdot, \mathbf{x}_j\right)\rangle \\
+    =\ &k(\mathbf{x}_i, \mathbf{x}_j)
+  \end{aligned}
+\end{equation*}
+
+Now that we have presented the kernel trick as well as the existence of a corresponding pre-Hilbert space, the next section will focus on finding and creating useful kernels, as well as presenting some classical kernels.
+
 \begin{figure*}
   \begin{minipage}{.5\textwidth}
     \centering
@@ -11,111 +114,6 @@
     Left side shows on the vertical axis the influence level of the point on the 2d plane from two positive points drawn  with \textbf{x} markers and of one negative points marked with \textbf{o}. On the right pane, the solid line reprensents the decision boundary and the dashed lines represents the contour levels of the decision function with learned using an RBF kernel.
   }
 \end{figure*}
-
-\section{Kernel methods}
-
-The previous section introduced the linear SVM classifier. The linear SVM, as we saw, allows us the find the best seperating hyperplane between two linearly seperable classes of a dataset. In this section we introduce the concept of kernels, allowing us to learn non linear decision boudaries, continuing with the Mercer theorem and kernel trick, results from functional analysis allowing us to use the newly introducd ideas of kernels with the previously introduces agorithm, with only light modifications.
-
-\subsection{Non linearly separable data}
-
-Very often, the decision boundary one is trying to learn is in it's nature non-linear. One trick that is often used in order to use linear learning algorithms is to add one or several dimensions to the data points by applying a non linear function of the coordinates of the point, to then learn the separating hyperplane in the projhected space. This method is known as features engineering, because we add engineered features to our data points.
-
-
-This approach would be very simple to implement in our current algorithm. Let $\phi : \mathcal{X} \rightarrow \mathcal{V}$ be a non linear transformation from our original space $\mathcal{X}$ to some higer dimensional pre Hilbert space $\mathcal{V}$. A pre Hilbert space is a generalization of a Euclidean space, the geometrical space we are used to. Saying that the image of the projection should be a pre Hilbert space simply means that the image set is equiped with a scalar product, needed for our training algorithm. We can now modify the previously introduced algorithm by replacing simply every dot product by the scalar product on the projected points in the $\mathcal{V}$ space, namely $\langle \phi(\cdot), \phi(\cdot)\rangle _{\mathcal{V}}$.
-
-
-In order to better understand kernels and the kernel trick, let's follow the example of polynomial projection of degree $d$, in which every point is projected to a vector containing every monomial of degree $d$. For instance, choosing $d = 2$ together with a $2$ dimensional input space leads to the projection $\phi : \mathbb{R}^2 \rightarrow \mathbb{R}^4$ defined as
-
-\begin{equation*}
-    \phi(x_1, x_2) \mapsto (x_1^2, x_2^2, x_1x_2, x_2x_1)
-\end{equation*}
-
-This representation, while adding more separation capabilities has the problem that the image feature space grows at an exponential rate together with $d$, making the choice of a larger $d$ prohibitivly expensive in terms of space usage. Though, the margin maximization algorithm only uses the scalar product of the observations in the feature space, which is simply the dot product of the mapped vectors. The following equations show that the projection in the high dimensional space is not required to the computation of the scalar product
-
-\begin{equation*}
-  \begin{aligned}
-    \phi(x) \cdot \phi(\tilde{x})
-    &= x_1^2\tilde{x}_1^2 + x_2^2\tilde{x}_2^2 + 2x_1x_2\tilde{x}_1\tilde{x}_2\\
-    &= \left(x \cdot \tilde{x}\right)^2 \\
-    &=: k(x, \tilde{x})
-  \end{aligned}
-\end{equation*}
-
-We call $k(\cdot, \cdot) : \mathbb{R}^2 \times \mathbb{R}^2 \rightarrow \mathbb{R}$ the kernel representation of the scalar product in the space $\phi(\mathbb{R}^2)$. One can generalize this idea to any polynomial degree $d$ as shown in \textcolor[rgb]{1,0,0}{ref?}, making the computation of the scalar product in the $d$-th monomial space as trivial as computing the scalar product in the original space.
-
-\subsection{Kernel trick}
-
-We have seen in the previous example, that it is sometimes possible to find a function $k :\mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}$ with $k(x, x') = \langle \phi(x), \phi(x')\rangle _{\mathcal{V}}$ for some projection $\phi : \mathcal{X} \rightarrow \mathcal{V}$. With these special functions, it is possible by only lightly modifying our original algorithm to run the learning algorithm in another pre Hilbert space without the computational cost of projecting our data in this other space. This is called the kernel trick.
-
-We will now change our point of view, and try to define the properties defining the class of functions being the representation of a scalar product of the projection of its inputs in another vector space. This means, which properties must hold for $k$ in order for a $\phi$ to exist with the correspondance property.
-
-Let $k :\mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}$ with $k(x, x') = \langle \phi(x), \phi(x')\rangle _{\mathcal{V}}$ for some projection $\mathcal{X} \rightarrow \mathcal{V}$, because $\langle \cdot, \cdot\rangle _{\mathcal{V}}$ is a scalar product, the following properties must hold
-
-\begin{itemize}
-\item \textit{Symmetry}
-  \begin{equation*}
-    \begin{aligned}
-      & \forall y_1, y_2 \in \mathcal{V}.\ 
-      \langle y_1, y_2\rangle _{\mathcal{V}} = \overline{\langle y_2, y_1\rangle _{\mathcal{V}}} & \Rightarrow\\
-      & \forall y_1, y_2 \in \phi(\mathcal{X}).\ 
-      \langle y_1, y_2\rangle _{\mathcal{V}} = \overline{\langle y_2, y_1\rangle _{\mathcal{V}}} & \Rightarrow\\
-      &\forall x_1, x_2 \in \mathcal{X}.\ 
-      \langle \phi(x_1), \phi(x_2)\rangle _{\mathcal{V}} = \overline{\langle \phi(x_2), \phi(x_1)\rangle _{\mathcal{V}}} &\Rightarrow\\
-      &\forall x_1, x_2 \in \mathcal{X}.\ 
-         k\left(x_1, x_2\right) = \overline{k\left(x_2, x_1\right)}
-    \end{aligned}
-  \end{equation*}
-
-\item \textit{Positive definitness} Positive definitness of a kernel is a stronger property than the one required for the positive definiteness in the features space. A kernel is said to be positive definite if for every $\alpha_1, ..., \alpha_n \in \mathbb{R}$ following inequality holds
-  \begin{equation*}
-    \sum_{i,j=1}^n\alpha_i\alpha_jk\left(x_i, x_j\right) \geq 0
-  \end{equation*}
-\end{itemize}
-
-We will show by construction, that these properties are sufficient to the proof of the existence of the desired space. The literature contains several examples of vector spaces and projections with the desired property. We will here proove the existence of such a space by construction.
-
-Let $k : \mathcal{X} \times \mathcal{X} \rightarrow \mathbb{R}$ be symmetrical and positive definite, and $\mathbb{R}^{\mathcal{X}}$ be the set of functions from a non empty set $\mathcal{X}$ to $\mathbb{R}$. We define the reproducing kernel map as follow
-
-\begin{equation}
-  \begin{aligned}
-    \phi : \mathcal{X} \rightarrow \mathcal{H}\\
-    \mathbf{x} \mapsto k(\cdot, \mathbf{x})
-  \end{aligned}
-\end{equation}
-
-We now show how the mapped observations of the training set $\left\{k\left(\cdot, \mathbf{x}_1\right), ..., k\left(\cdot, \mathbf{x}_n\right)\right\}$ spans a Hilbert space in which the reproducing property hold with the scalar defined on the span set $\langle k\left(\cdot, \mathbf{x}_i\right), k\left(\cdot, \mathbf{x}_j\right)\rangle = k\left(\mathbf{x}_i, \mathbf{x}_j\right)$ and its canonical derivation for the spanned space
-
-\begin{equation*}
-  \begin{aligned}
-    \langle f, g\rangle 
-    &= \langle \sum_{i=1}^n\alpha_ik(\cdot, \mathbf{x}_i), \sum_{j=1}^n\beta_jk(\cdot, \mathbf{x}_j)\rangle \\
-    &= \sum_{i,j=1}^n\alpha_i\beta_j \langle k\left(\cdot, \mathbf{x}_i\right), k\left(\cdot, \mathbf{x}_j\right)\rangle \\
-    &= \sum_{i,j=1}^n\alpha_i\beta_j k\left(\mathbf{x}_i, \mathbf{x}_j\right)
-  \end{aligned}
-\end{equation*}
-
-Positive definitness, bilinearity and symmetry can all be trivially derived from the definition of this scalar product together with the symmetry and positive definitness of the kernel function. Then attentive reader will notive that the functions $\left\{k\left(\cdot, x_1\right), ..., k\left(\cdot, x_n\right)\right\}$ must nost necessarily be linearly independant, leading to a non unqiue mapping from $f$ to the coefficients $\alpha_1, ..., \alpha_n$. To see that this doesn't imply the ill definitness of the defined scalar product, we note that
-
-\begin{equation*}
-  \langle f, g\rangle = \sum_{j=1}^n\beta_j f\left(\mathbf{x}_j\right)
-\end{equation*}
-
-and by symmetry
-
-\begin{equation*}
-  \langle f, g\rangle = \langle g, f\rangle = \sum_{i=1}^n\alpha_i g\left(\mathbf{x}_i\right)
-\end{equation*}
-
-Which shows that the scalar product does not depend on the choice of coefficients for the functions $f$ and $g$ confirming the scalar product is well defined. Thus, the previously defined scalar product, together with the norm $|f| = \sqrt{\langle f, f\rangle }$ define a valid Hilbert space and the correspondance property holds
-
-\begin{equation*}
-  \begin{aligned}
-    \langle \phi(\mathbf{x}_i), \phi(\mathbf{x}_j)\rangle =\ &\langle k\left(\cdot, \mathbf{x}_i\right), k\left(\cdot, \mathbf{x}_j\right)\rangle \\
-    =\ &k(\mathbf{x}_i, \mathbf{x}_j)
-  \end{aligned}
-\end{equation*}
-
-Now that we have presented the kernel trick as well as the existence of a corresponding Hilbert space, the next section will focus on finding and creating useful kernels, as well as presenting some classical kernels.
 
 \subsection {Some useful kernels}
 
