@@ -15,15 +15,15 @@
 
 \section{Kernel methods}
 
-The previous section introduced the linear SVM classifier. As we have seen, the linear SVM  allows us the find the best separating hyperplane between two linearly separable classes of observations. In this section we introduce the concept of kernels, allowing us to learn non linear decision boundaries, continuing with the \textit{Reproducing Kernel Hilbert Space} and the \textit{kernel trick}, results from functional analysis allowing us to use the newly introduced ideas of kernels with the previously presented algorithm.
+The previous section defined the linear SVM classifier. As we have seen, the linear SVM  allows us the find the best separating hyperplane between two linearly separable classes of observations. In this section we introduce the concept of kernels, allowing us to learn non linear decision boundaries. We continue with the \textit{Reproducing Kernel Hilbert Space} and the \textit{kernel trick}, results from functional analysis allowing us to use the newly introduced idea of kernels with the previously presented algorithm.
 
 \subsection{Non linearly separable data}
 
-Very often, the decision boundary one is trying to learn is in its nature non-linear. One method that is often used to make an hyperplane learning algorithm learn a non-linear decision boundary is to first map the dataset to another space using a non linear transformation. The learned boundary is then linear in the mapped space, but because the chosen projection is not linear, the pre-image of the decision boundary is not linear.
+Very often, the decision boundary one is trying to learn is of nature non-linear. One method that is often used to make a hyperplane learning algorithm learn a non-linear decision boundary is to first map the dataset to another space using a non linear transformation. The learned boundary is then linear in the mapped space, but because the chosen projection is not linear, the pre-image of the decision boundary must not be linear.
 
-This approach is very simple to implement and only requires light modifications the presented algorithm. Let $\phi : \mathbb{R}^n \rightarrow \mathcal{V}$ be our projection into the feature space $\mathcal{V}$. In order for the SVM algorithm to be usable, the $\mathcal{V}$ space must be a \textit{pre-Hilbert space}.
+This approach is very simple to implement and only requires light modifications to the presented algorithm. Let $\phi : \mathbb{R}^n \rightarrow \mathcal{V}$ be our projection into the feature space $\mathcal{V}$. In order for the SVM algorithm to be usable, the $\mathcal{V}$ space must be a \textit{pre-Hilbert space}.
 
-A pre-Hilbert space is a vector space equiped with a scalar product. It is simply a generalization of the usual geometrical space, the Euclidian space. This generalization allows us to work with possibly infinitly dimensional spaces, such as for instance the vector space of absolutely converging sequences $\ell_1$, the same way as we work with the more intuitive vector spaces. In this case, the optimization problem at the heart of the SVM's training algorithm is only based on the scalar product between mapped observations, thus requiring the feature space to be a pre-Hilbert space. 
+A pre-Hilbert space is a vector space equipped with a scalar product. It is simply a generalization of the usual geometrical space, the Euclidian space. This generalization allows us to work with possibly infinitly dimensional spaces, such as for instance the vector space of absolutely converging sequences $\ell_1$, the same way as we work with the more intuitive vector spaces. In this case, the optimization problem at the heart of the SVM's training algorithm is only based on the scalar product between mapped observations, thus requiring the feature space to be a pre-Hilbert space. 
 
 We can now modify the previously introduced algorithm by replacing simply every dot product by the scalar product on the projected points in the $\mathcal{V}$ space, namely $\langle \phi(\cdot), \phi(\cdot)\rangle _{\mathcal{V}}$.
 
@@ -49,10 +49,9 @@ We call $k(\cdot, \cdot) : \mathbb{R}^2 \times \mathbb{R}^2 \rightarrow \mathbb{
 
 \subsection{Kernel trick}
 
-We have seen in the previous example, that it is sometimes possible to find a function $k :\mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$ with $k(x, x') = \langle \phi(x), \phi(x')\rangle _{\mathcal{V}}$ for some projection $\phi : \mathbb{R}^n \rightarrow \mathcal{V}$. With these special functions, it is possible by only lightly modifying our original algorithm to run the learning algorithm in another pre-Hilbert space without the computational cost of projecting our data in this other space. This is called the kernel trick.
+We have seen in the previous example, that it is sometimes possible to find a function $k :\mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$ with $k(x, x') = \langle \phi(x), \phi(x')\rangle _{\mathcal{V}}$ for some projection $\phi : \mathbb{R}^n \rightarrow \mathcal{V}$. Such special functions, it is possible by only lightly modifying the original algorithm to run the learning algorithm in another pre-Hilbert space without the computational cost of projecting the data in this other space. This is called the kernel trick.
 
-
-We will now change our point of view and stop looking for a smart way to avoid projecting in the feature space, but instead try to define the set of functions $k$, called \textit{kernel functions}, for which it is possible to construct a pre-Hilbert space $\mathcal{V}$ and a projection $\phi$ such that $k(x, x') = \langle\phi(x), \phi(x')\rangle_{\mathcal{V}}$. This, as we will show in the next section, will make it possible to express a large variety of decision boundaries through the choice of the function.
+We will now change our point of view and stop looking for a smart way to avoid projecting in the feature space, but instead try to define the set of functions $k$, called \textit{kernel functions}, for which it is possible to construct a pre-Hilbert space $\mathcal{V}$ and a projection $\phi$ such that $k(x, x') = \langle\phi(x), \phi(x')\rangle_{\mathcal{V}}$. This, as we will show in the next section, will make it possible to express a large variety of decision boundaries through the choice of the kernel function.
 
 Let $k :\mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$, $k$ is said to be a \textit{kernel function} if the following properties hold
 
@@ -71,9 +70,9 @@ Let $k :\mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$, $k$ is said to
   For any $x_1, ..., x_m \in \mathbb{R}^n$ and $c_1, ..., c_m \in \mathbb{R}$  
 \end{itemize}
 
-We now show by construction, that these properties are sufficient to the proof of the existence of the desired pre-Hilbert space. The literature contains several examples of vector spaces and projections with the desired property, but we will here prove the existence of such a space by construction.
+We now show by construction that these properties are sufficient to the proof of the existence of the desired pre-Hilbert space. The literature contains several examples of vector spaces and projections with the desired property, but we will here prove the existence of such a space by constructing one of those.
 
-Let $k : \mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$ be a kernel, and $\mathbb{R}^{\mathbb{R}^n}$ be the set of functions from $\mathbb{R}^n$ to $\mathbb{R}$. We define the reproducing kernel map as follow
+Let $k : \mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$ be a kernel, and $\mathbb{R}^{\mathbb{R}^n}$ be the set of functions from $\mathbb{R}^n$ to $\mathbb{R}$. We define the reproducing kernel map
 
 \begin{equation}
   \begin{aligned}
@@ -82,7 +81,7 @@ Let $k : \mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$ be a kernel, a
   \end{aligned}
 \end{equation}
 
-Using this projection, the span of the mapped training observations constructs the following sub-vector space of functions $\mathcal{V} \subset \mathbb{R}^{\mathbb{R}^n}$
+Using this projection, the span of the mapped training observations constructs the following sub-vector space of the vector space of functions
 
 \begin{equation*}
   \begin{aligned}
@@ -91,7 +90,7 @@ Using this projection, the span of the mapped training observations constructs t
   \end{aligned}
 \end{equation*}
 
-The vector space we have constructed is a subset of the infinite dimensional vector space of functions from $\mathbb{R}^n$ to $\mathbb{R}$, but because it was constructed as the span of finitly many elements, we know that the dimension of the spanned space is at most $m$. We can now define a scalar product on $\mathcal{V}$ by first defining it on its spanning elements $\langle k(\cdot, \mathbf{x}_i), k(\cdot, \mathbf{x}_j)\rangle_{\mathcal{V}} = k(\mathbf{x}_i, \mathbf{x}_j)$. The definition can be extended on the rest of the vector space, defining the scalar product between two arbitrary functions $f = \sum_{i=1}^m\alpha_ik(\cdot, \mathbf{x}_i)$ and $g = \sum_{i=1}^m\beta_ik(\cdot, \mathbf{x}_i)$ elements of $\mathcal{V}$ as
+The constructed vector space is a subset of the infinite dimensional vector space of functions from $\mathbb{R}^n$ to $\mathbb{R}$, but because it was constructed as the span of finitely many elements, we know that the dimension of the spanned space is at most $m$. We can now define a scalar product on $\mathcal{V}$ by first defining it on its spanning elements $\langle k(\cdot, \mathbf{x}_i), k(\cdot, \mathbf{x}_j)\rangle_{\mathcal{V}} = k(\mathbf{x}_i, \mathbf{x}_j)$. The definition can be extended to the rest of the vector space, defining the scalar product between two arbitrary functions $f = \sum_{i=1}^m\alpha_ik(\cdot, \mathbf{x}_i)$ and $g = \sum_{i=1}^m\beta_ik(\cdot, \mathbf{x}_i)$ elements of $\mathcal{V}$ as
 
 \begin{equation}
   \begin{aligned}
@@ -102,7 +101,7 @@ The vector space we have constructed is a subset of the infinite dimensional vec
     \end{aligned}
 \end{equation}
 
-The properties required for $\langle\cdot, \cdot\rangle_{\mathcal{V}}$ to be a scalar product directly follow from its definition. Bilinearity is a direct consequence of the extension of the definition to the whole span of the basis functions. As for symmetry and positive definiteness, these were set as conditions for $k$ to be a kernel function. Thus, we have constructed a pre-Hilbert space for which $k$ is equal to the scalar product of projected points
+The properties required for $\langle\cdot, \cdot\rangle_{\mathcal{V}}$ to be a scalar product directly follow from its definition. Bilinearity is a direct consequence of the extension of the definition to the whole span of the basis functions. As for symmetry and positive definiteness, these were set as conditions for $k$ to be a kernel function. We have constructed a pre-Hilbert space for which $k$ is equivalent to the scalar product of projected points
 
 \begin{equation*}
   \begin{aligned}
@@ -111,7 +110,7 @@ The properties required for $\langle\cdot, \cdot\rangle_{\mathcal{V}}$ to be a s
   \end{aligned}
 \end{equation*}
 
-Now that we have presented the kernel trick as well as the existence of a corresponding pre-Hilbert space for every kernel function, the next section will focus on finding and creating useful kernels, as well as presenting some classical kernels.
+Now that we have presented the kernel trick as well as the existence of a corresponding pre-Hilbert space for every kernel function, the next section will study the process of finding and creating useful kernels, as well as presenting some classical kernels.
 
 \subsection {Some useful kernels}
 
