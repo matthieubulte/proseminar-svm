@@ -1,0 +1,98 @@
+% Created 2017-06-01 Thu 13:42
+\documentclass[bigger]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\usetheme{default}
+\author{Matthieu Bulté}
+\date{2017-06-06}
+\title{Learning with Kernels}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs 25.2.1 (Org mode 8.2.10)}}
+\begin{document}
+
+\maketitle
+
+\section{Learning with Kernels}
+\label{sec-1}
+
+\begin{frame}[label=sec-1-1]{What are we talking about}
+\end{frame}
+
+\begin{frame}[label=sec-1-2]{Classification}
+We have data
+We have labels
+We want to learn how to label new data (decision function)
+\end{frame}
+
+
+\begin{frame}[label=sec-1-3]{Decision function / Boundary (Plots of many different decision boundaries)}
+\end{frame}
+
+
+\begin{frame}[label=sec-1-4]{ML is about finding the right transformations for making it trivial to}
+Make the classification task trivial (linear) 
+\end{frame}
+
+
+\begin{frame}[label=sec-1-5]{Margin max}
+(or how to pick the best trivial decision function)
+\end{frame}
+
+
+\begin{frame}[label=sec-1-6]{Demo 1 - moving linear decision boundary}
+\end{frame}
+
+\begin{frame}[label=sec-1-7]{support vectors}
+H only depends on (w, b)
+\end{frame}
+
+\begin{frame}[label=sec-1-8]{Non linear projection: idea}
+\end{frame}
+
+\begin{frame}[label=sec-1-9]{Demo 2 - projection making linear trivial}
+\end{frame}
+
+\begin{frame}[label=sec-1-10]{Kernel trick}
+k(x, y) = <phi(x), phi(y)>
+\end{frame}
+
+\begin{frame}[label=sec-1-11]{Demo 3 - some kernels}
+\end{frame}
+
+\begin{frame}[label=sec-1-12]{the good}
+\begin{itemize}
+\item E[P(error)] <= \ldots{}
+\item performance on small data sets
+\item domain knowledge
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=sec-1-13]{the bad}
+\begin{itemize}
+\item parameters tuning
+\item training time
+\item domain knowledge (what do I know when talking about very complex problems?)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=sec-1-14]{conclusion}
+?
+\end{frame}
+% Emacs 25.2.1 (Org mode 8.2.10)
+\end{document}
