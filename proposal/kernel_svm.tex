@@ -51,7 +51,7 @@ We call $k(\cdot, \cdot) : \mathbb{R}^2 \times \mathbb{R}^2 \rightarrow \mathbb{
 
 We have seen in the previous example, that it is sometimes possible to find a function $k :\mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$ with $k(x, x') = \langle \phi(x), \phi(x')\rangle _{\mathcal{V}}$ for some projection $\phi : \mathbb{R}^n \rightarrow \mathcal{V}$. Such special functions, it is possible by only lightly modifying the original algorithm to run the learning algorithm in another pre-Hilbert space without the computational cost of projecting the data in this other space. This is called the kernel trick.
 
-We will now change our point of view and stop looking for a smart way to avoid projecting in the feature space, but instead try to define the set of functions $k$, called \textit{kernel functions}, for which it is possible to construct a pre-Hilbert space $\mathcal{V}$ and a projection $\phi$ such that $k(x, x') = \langle\phi(x), \phi(x')\rangle_{\mathcal{V}}$. This, as we will show in the next section, will make it possible to express a large variety of decision boundaries through the choice of the kernel function.
+We will now change our point of view and stop looking for a smart way to avoid projecting in the feature space, but instead try to define the set of functions $k$, called \textit{kernel functions}, for which it is possible to construct a pre-Hilbert space $\mathcal{V}$ and a projection $\phi$ such that $k(x, x') = \langle\phi(x), \phi(x')\rangle_{\mathcal{V}}$. This, as we will show in the next section, will make it possible to express a large variety of decision boundaries through the choice of the kernel function without having to search for a corresponding pre-Hilbert space and a mapping $\phi$.
 
 Let $k :\mathbb{R}^n \times \mathbb{R}^n \rightarrow \mathbb{R}$, $k$ is said to be a \textit{kernel function} if the following properties hold
 
@@ -110,7 +110,7 @@ The properties required for $\langle\cdot, \cdot\rangle_{\mathcal{V}}$ to be a s
   \end{aligned}
 \end{equation*}
 
-Now that we have presented the kernel trick as well as the existence of a corresponding pre-Hilbert space for every kernel function, the next section will study the process of finding and creating useful kernels, as well as presenting some classical kernels.
+Now that we have presented the kernel trick as well as the existence of a corresponding pre-Hilbert space for every kernel function. One can now treat the SVM algorithm as a black box in which it is possible to plug any kernel function without having to think about the existence of any pre-Hilbert space or mapping $\phi$. The next section will study the process of finding and creating useful kernels, as well as presenting some classical kernels.
 
 \subsection {Some useful kernels}
 
@@ -119,7 +119,7 @@ We have defined in the last section what kernels are and how we can modify our a
 One first way to choose a kernel is by using existing knowledge about the shape the decision boundary should have. Let's recall the equation of the decision boundary defined by the learned parameters using the kernel $k$
 
 \begin{equation*}
-  \mathscr{H} = \left\{\mathbf{x} \in \mathbb{R}^n\ |\ \sum_{\mathbf{x}_i \text{ is SV}}\alpha_iy_ik\left(\mathbf{x}, \mathbf{x}_i\right) + b = 0\right\}
+  \mathscr{H} = \left\{\mathbf{x} \in \mathbb{R}^n\ |\ \sum_{\mathbf{x}_i \text{ is SV}}\boldsymbol{\alpha}_iy_ik\left(\mathbf{x}, \mathbf{x}_i\right) + b = 0\right\}
 \end{equation*}
 
 For illustration, if we choose the kernel to be a polynomial kernel of degree $2$, meaning $k\left(\mathbf{x}, \mathbf{\tilde{x}}\right) = \left(\mathbf{x} \cdot \mathbf{\tilde{x}} + 1\right)^2$, we can refine the definition of the decision boundary as the set of every $\mathbf{x} \in \mathbb{R}^2$ for which following holds
@@ -166,7 +166,7 @@ This kernel contains the idea that similarity between two observations should de
 Let's first recall what was the decision function that was learned by the algorithm
 
 \begin{equation*}
-  f\left(x\right) = sgn\left(\sum_{\mathbf{x}_i \text{ is SV}}\alpha_iy_ik\left(\mathbf{x}, \mathbf{x}_i\right) + b\right)
+  f\left(x\right) = sgn\left(\sum_{\mathbf{x}_i \text{ is SV}}\boldsymbol{\alpha}_iy_ik\left(\mathbf{x}, \mathbf{x}_i\right) + b\right)
 \end{equation*}
 
 We evaluate the sign of a linear combination of the similarity of the current observation to the support vectors. One can see understand each support vector as a point of influence in the direction of the class it belongs to, with it's influence intensity exponentially decaying with the distance. The observation will then be classified by taking a weighted sum of the influence of each support vector and verifying if it is over or under some threshold $b$.

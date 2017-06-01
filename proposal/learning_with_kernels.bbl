@@ -26,6 +26,12 @@ V.~N. Vapnik, \emph{The Nature of Statistical Learning Theory}.\hskip 1em plus
   0.5em minus 0.4em\relax New York, NY, USA: Springer-Verlag New York, Inc.,
   1995.
 
+\bibitem{kuhn1951}
+H.~W. Kuhn and A.~W. Tucker, ``Nonlinear programming,'' in \emph{Proceedings of
+  the Second Berkeley Symposium on Mathematical Statistics and
+  Probability}.\hskip 1em plus 0.5em minus 0.4em\relax Berkeley, Calif.:
+  University of California Press, 1951, pp. 481--492.
+
 \bibitem{Schoelkopf95extractingsupport}
 B.~Schoelkopf, C.~Burges, and V.~Vapnik, ``Extracting support data for a given
   task,'' in \emph{Proceedings, First International Conference on Knowledge

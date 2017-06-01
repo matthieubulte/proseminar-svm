@@ -2,6 +2,7 @@
  "references"
  (lambda ()
    (LaTeX-add-bibitems
+    "kuhn1951"
     "Scholkopf:2001:LKS:559923"
     "Shalev-Shwartz:2007:PPE:1273496.1273598"
     "Schoelkopf95extractingsupport"

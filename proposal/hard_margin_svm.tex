@@ -1,6 +1,6 @@
 \section {Margin maximization classifier}
 
-The hard margin classifier learns the parameters $w \in \mathbb{R}^n$ and $b \in \mathbb{R}$ of a hyperplane $\mathscr{H} := \left\{ \mathbf{x} \in \mathbb{R}^n\ |\ w \cdot \mathbf{x} + b = 0\right\}$, separating two classes of observations $\mathbf{x_i} \in \mathbb{R}^n$. To train this classifier, the algorithm takes a set of $m$ observations $\mathbf{x_i}$ together with a vector of labels $y_i = \pm 1$ for each of the observations indicating which class each observation belongs to. 
+The hard margin classifier learns the parameters $w \in \mathbb{R}^n$ and $b \in \mathbb{R}$ defining the hyperplane $\mathscr{H} := \left\{ \mathbf{x} \in \mathbb{R}^n\ |\ w \cdot \mathbf{x} + b = 0\right\}$, separating two classes of observations $\mathbf{x_i} \in \mathbb{R}^n$. To train this classifier, the algorithm takes a set of $m$ observations $\mathbf{x_i}$ together with a vector of labels $y_i = \pm 1$ for each of the observations indicating which class each observation belongs to. 
 
 \begin{equation*}
 (\mathbf{x}_1, y_1), (\mathbf{x}_2, y_2), \dotsc, (\mathbf{x}_m, y_m)
@@ -110,7 +110,7 @@ By replacing $(6)$ and $(7)$ in the Lagrangian $(5)$, we obtain an optimization 
   \end{aligned}
 \end{equation}
 
-Finally, the Karush-Kuhn-Tucker theorem, from optimization theory, states that the solution $\boldsymbol{\alpha}$ satisfies the following equality for all $i = 1\dotsc m$
+Finally, the Karush-Kuhn-Tucker condition \cite{kuhn1951}, from optimization theory, states that the solution $\boldsymbol{\alpha}$ satisfies the following equality for all $i = 1\dotsc m$
 
 \begin{equation}
   \boldsymbol{\alpha}_i[y_i(w \cdot \mathbf{x}_i + b) - 1] = 0
@@ -128,13 +128,13 @@ The importance of this equality is twofold. Firstly, it allows us from one obser
 Secondly, this equality implies that every observation not lying on the margin must have a vanishing Lagrangian coefficient, meaning $\boldsymbol{\alpha}_i = 0$. These special observations are called \textit{support vectors}. As we have shown in (7) and (10), the parameters $w$ and $b$ that uniquely define the separating hyperplane can both be expressed only in terms of the support vectors. This means that support vectors carry all the information that was to be extracted from the training set in order to create the decision boundary. The decision function can be rewritten as following
 
 \begin{equation}
-  f(\mathbf{x}) = sgn\left(\sum_{\mathbf{x}_i \text{ is SV}}\alpha_iy_i\mathbf{x} \cdot \mathbf{x}_i + b\right)
+  f(\mathbf{x}) = sgn\left(\sum_{\mathbf{x}_i \text{ is SV}}\boldsymbol{\alpha}_iy_i\mathbf{x} \cdot \mathbf{x}_i + b\right)
 \end{equation}
 
 Furthermore, it can be shown \cite{Vapnik:1995:NSL:211359} that the number of support vectors give us the following upper bound on the classifier's out of sample error. This means that a low number of support vectors can is an indicator of the capacity of a classifier to generalize to unseen samples. 
 
 \begin{equation}
-  \mathbb{E}\left[Pr\left(\text{error}\right)\right] \leq \frac{\mathbb{E}\left[\text{number of support vectors}\right]}{\text{number of training observations}}
+  \mathbb{E}\left[\text{Pr}\left(\text{error}\right)\right] \leq \frac{\mathbb{E}\left[\text{number of support vectors}\right]}{\text{number of training observations}}
 \end{equation}
 
 This inequality allows us to quickly derive a simple estimation of the quality of the learned classifier by just looking at the number of support vector.
