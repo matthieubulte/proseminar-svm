@@ -167,10 +167,9 @@ function demo_1()
             if showing > 0
                 mps = [ abs(vecdot(Xp[i,:], w) + b)/vecnorm(w) for i=1:50]
                 mp, ip = findmin(mps)
+                
                 xp = Xp[ip, :]
                 xxp = xp - mp*w/vecnorm(w)
-                c = plt[:Circle]((xp[1],xp[2]), mp, fill=false, linestyle="dashed")
-                #ax[:add_artist](c)
                 plot([xp[1], xxp[1]], [xp[2], xxp[2]], linestyle="dashed", color="black", linewidth=1)
 
 
@@ -179,8 +178,6 @@ function demo_1()
                 xn = Xn[ineg, :]
                 xxn = xn + mn*w/vecnorm(w)
 
-                c = plt[:Circle]((xn[1],xn[2]), mn, fill=false, linestyle="dashed")
-                #ax[:add_artist](c)
                 plot([xn[1], xxn[1]], [xn[2], xxn[2]], linestyle="dashed", color="black", linewidth=1)
             end
         end
