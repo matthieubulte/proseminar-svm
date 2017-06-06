@@ -1,7 +1,7 @@
 #+TITLE:     Learning with Kernels
 #+AUTHOR:    Matthieu Bulté
 #+EMAIL:     matthieu.bulte@tum.de
-#+DATE:      2017-06-06
+#+DATE:      06-06-2017
 #+DESCRIPTION: 
 #+KEYWORDS: 
 #+LANGUAGE:  en
@@ -16,48 +16,107 @@
 
 * Learning with Kernels
 
-** What are we talking about
+** Are are we doing?
 
-** Classification
+\bar{Machine learning} Science is about transforming hard problems
+into problems trivial to solve
+
+** What is our problem?
 We have data
 We have labels
-We want to learn how to label new data (decision function)
+We want to infer a rule to label new data
 
+** Less abstract please
+Decision function
+Decision Boundary
+(Plots of many different decision boundaries)
 
-** Decision function / Boundary (Plots of many different decision boundaries)
+** A trivial problem
+Linearly seperale data set
 
+** Solving the trivial problem
+The Line
 
-** ML is about finding the right transformations for making it trivial to
-Make the classification task trivial (linear) 
+** Demo 1 - which line?
 
+** Margin maximization
+Picking the best trivial solution
+(opt problem)
+Picture of a convex vs non convec function
 
-** Margin max 
-(or how to pick the best trivial decision function)
+** Demo 1 - cont'd
 
+** Lagrange
+no, he's not french, still a fine guy
 
-** Demo 1 - moving linear decision boundary
+(lagrangian)
 
-** support vectors
-H only depends on (w, b)
+** Support Vectors
 
-** Non linear projection: idea
+H only depends on support vectors!
 
-** Demo 2 - projection making linear trivial
+** A not so trivial problem
+non linearly separable datasets
 
-** Kernel trick
-k(x, y) = <phi(x), phi(y)>
+** Time to be smart
+How do we make this problem easier?
+
+** Transforming the problem
+Space travel
+
+show a pic of a rocket -> 
+not this kind of space travel...
+
+** (Vector) Space Travel
+Project the data to another space where the problem is easy
+Solve the problem
+Bring the easy solution to the hard problem
+
+** Demo 2
+
+** Not there yet
+Projection is expensive
+(polynomial has factorial grows)
+
+** Could we avoid it?
+\phi(x) = (x_1^2, x_2^2, sqrt(2)x_1x_2)
+<\phi(x), \phi(y)> = ... = (<x, y>)^2 := k(x, y)
+
+** Hello from the other side
+Change our PoV, we have
+
+           (phi, space) -> kernel
+
+** Hello from the other side
+Change our PoV, we \bar{have} want  
+
+           (phi, space) <- kernel
+
+*mind blown*
+
+** Mercer & co
+Many different space can be constructed, all based on the same idea.
+We chose to present the easy one and left out the useful one. Intuition
+is king.
+
+** In other words
+   Plug & Play
 
 ** Demo 3 - some kernels
+https://cs.stanford.edu/people/karpathy/svmjs/demo/
 
-** the good
-+ E[P(error)] <= ...
-+ performance on small data sets
-+ domain knowledge
+** the good, the bad, ...
+ no uggly :)
 
-** the bad
+bad
 + parameters tuning
 + training time
 + domain knowledge (what do I know when talking about very complex problems?)
 
-** conclusion
-?
+
+good
++ E[P(error)] <= ...
++ performance on small data sets
++ domain knowledge
+
+** Thank you

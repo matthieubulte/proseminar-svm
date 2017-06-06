@@ -69,17 +69,43 @@ end
 
 function demo_1()
     X, y = lin_sep_two_clouds();
-    @manipulate for α=linspace(pi/2, pi, 10)
+    Xp, Xn = [X[:,1][y.==1] X[:,2][y.==1]], [X[:,1][y.==-1] X[:,2][y.==-1]]
+
+    @manipulate for α=linspace(pi/2, pi, 50), b=linspace(.5, 1, 50)
         withfig(fig) do
             xlim(-.5,1.5)
             ylim(-.5,1.5)
             axis("off")
-            plot(.5 + 10*[cos(α), cos(α+pi)], .5 + 10*[sin(α), sin(α+pi)],color="black",linestyle="dashed",linewidth=0.7)
-            
+
+            ax = gca()
+
+            w = [-sin(α), cos(α)]
+            v = [cos(α), sin(α)]
+            x₁ = -w * b + 10*v
+            x₂ = -w * b - 10*v
+
+            plot([x₁[1], x₂[1]], [x₁[2], x₂[2]],color="black",linewidth=0.7)
+
             scatter(X[:,1][y.==1], X[:,2][y.==1], marker="x", c="black")
-            scatter(X[:,1][y.==-1], X[:,2][y.==-1], marker="o", edgecolor="black", facecolor=(0,0,0,0))
-            
-            #scatter(X[:,1], X[:,2], s=10000, edgecolor="black", facecolor=(0,0,0,0))
+            scatter(X[:,1][y.==-1], X[:,2][y.==-1], marker="o", edgecolor="black", facecolor=(0,0,0,0))        
+
+            mps = [ abs(vecdot(Xp[i,:], w) + b) for i=1:50]
+            mp, ip = findmin(mps)
+            xp = Xp[ip, :]
+            xxp = xp - mp*w
+            c = plt[:Circle]((xp[1],xp[2]), mp, fill=false, linestyle="dashed")
+            ax[:add_artist](c)
+            plot([xp[1], xxp[1]], [xp[2], xxp[2]], linestyle="dashed", color="black", linewidth=1)
+
+
+            mns = [ abs(vecdot(Xn[i,:], w) + b) for i=1:50]
+            mn, ineg = findmin(mns)
+            xn = Xn[ineg, :]
+            xxn = xn + mn*w
+
+            c = plt[:Circle]((xn[1],xn[2]), mn, fill=false, linestyle="dashed")
+            ax[:add_artist](c)
+            plot([xn[1], xxn[1]], [xn[2], xxn[2]], linestyle="dashed", color="black", linewidth=1)
         end
     end;
 end
