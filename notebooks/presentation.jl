@@ -1,3 +1,9 @@
+using PyPlot
+using Interact
+using Distributions
+using Convex
+using SCS
+
 function cloud!(x, res, start, n, d)
     dim = size(x, 2)
     for i=1:n
@@ -65,13 +71,76 @@ function transform(f, X)
     xd,yd,zd
 end
 
+function make_grammian(K, x, y)
+    N = size(x, 1)
+    Q = zeros(N, N)
+    
+    for i=1:N
+        for j=1:i
+            Q[i, j] = K(x[i, :], x[j, :]) * y[i] * y[j]
+            Q[j, i] = Q[i, j]
+        end
+    end
+    
+    min_ev = eigmin(Q)
+    if min_ev < 0
+        Q - 2*min_ev .* I
+    else
+        Q
+    end
+end
 
+function train_svm(data, labels; K=vecdot, tol=eps())
+    N = size(data, 1)
+    
+    Q = make_grammian(K, data, labels)
+    
+    # compute α
+    α = Variable(N, 1)
+    
+    problem = minimize(0.5*quadform(α, Q) - vecdot(α, ones(N)))
+    problem.constraints += α >= 0
+    problem.constraints += vecdot(α, labels) == 0
+
+    solve!(problem, SCSSolver(verbose=false))
+    α = α.value[:, 1]
+    α = sparse(α)
+    
+    # compute w
+    w = zeros(size(data, 2))
+    for i = 1:N
+        if α[i] > 0
+            w += α[i] * labels[i] * data[i, :]
+        end
+    end
+    
+    # compute b
+    b = 0
+    for i = 1:N
+        if α[i] > 0
+            b = labels[i] - K(data[i, :], w)
+            break
+        end
+    end
+    
+    w,b
+end
 
 function demo_1()
-    X, y = lin_sep_two_clouds();
+    X = readdlm("lin_points.txt")
+    y = repeat([1; -1], inner=50)
+    
     Xp, Xn = [X[:,1][y.==1] X[:,2][y.==1]], [X[:,1][y.==-1] X[:,2][y.==-1]]
 
-    @manipulate for α=linspace(pi/2, pi, 50), b=linspace(.5, 1, 50)
+    best_w, best_b = train_svm(X, y)
+    
+    @manipulate for α=linspace(pi/2, pi, 50),
+                    b=linspace(.5, 1, 50),
+                    showing=[
+                        :none => 0,
+                        :closest => 1,
+                        :best => 2
+                    ]
         withfig(fig) do
             xlim(-.5,1.5)
             ylim(-.5,1.5)
@@ -80,32 +149,40 @@ function demo_1()
             ax = gca()
 
             w = [-sin(α), cos(α)]
-            v = [cos(α), sin(α)]
-            x₁ = -w * b + 10*v
-            x₂ = -w * b - 10*v
-
+            
+            if showing == 2
+                w,b = best_w, best_b
+            end
+            
+            v = [w[2], -w[1]]
+            
+            x₁ = -w * b/vecnorm(w)^2 + 10*v
+            x₂ = -w * b/vecnorm(w)^2 - 10*v
+            
             plot([x₁[1], x₂[1]], [x₁[2], x₂[2]],color="black",linewidth=0.7)
 
             scatter(X[:,1][y.==1], X[:,2][y.==1], marker="x", c="black")
             scatter(X[:,1][y.==-1], X[:,2][y.==-1], marker="o", edgecolor="black", facecolor=(0,0,0,0))        
 
-            mps = [ abs(vecdot(Xp[i,:], w) + b) for i=1:50]
-            mp, ip = findmin(mps)
-            xp = Xp[ip, :]
-            xxp = xp - mp*w
-            c = plt[:Circle]((xp[1],xp[2]), mp, fill=false, linestyle="dashed")
-            ax[:add_artist](c)
-            plot([xp[1], xxp[1]], [xp[2], xxp[2]], linestyle="dashed", color="black", linewidth=1)
+            if showing > 0
+                mps = [ abs(vecdot(Xp[i,:], w) + b)/vecnorm(w) for i=1:50]
+                mp, ip = findmin(mps)
+                xp = Xp[ip, :]
+                xxp = xp - mp*w/vecnorm(w)
+                c = plt[:Circle]((xp[1],xp[2]), mp, fill=false, linestyle="dashed")
+                #ax[:add_artist](c)
+                plot([xp[1], xxp[1]], [xp[2], xxp[2]], linestyle="dashed", color="black", linewidth=1)
 
 
-            mns = [ abs(vecdot(Xn[i,:], w) + b) for i=1:50]
-            mn, ineg = findmin(mns)
-            xn = Xn[ineg, :]
-            xxn = xn + mn*w
+                mns = [ abs(vecdot(Xn[i,:], w) + b)/vecnorm(w) for i=1:50]
+                mn, ineg = findmin(mns)
+                xn = Xn[ineg, :]
+                xxn = xn + mn*w/vecnorm(w)
 
-            c = plt[:Circle]((xn[1],xn[2]), mn, fill=false, linestyle="dashed")
-            ax[:add_artist](c)
-            plot([xn[1], xxn[1]], [xn[2], xxn[2]], linestyle="dashed", color="black", linewidth=1)
+                c = plt[:Circle]((xn[1],xn[2]), mn, fill=false, linestyle="dashed")
+                #ax[:add_artist](c)
+                plot([xn[1], xxn[1]], [xn[2], xxn[2]], linestyle="dashed", color="black", linewidth=1)
+            end
         end
     end;
 end

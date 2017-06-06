@@ -77,10 +77,10 @@ Although the previous formulation of the optimization problem helped us to bette
 In order to get to these benefits, we introduce the Lagrangian function $L$ together with Lagrange multipliers $\boldsymbol{\alpha}_i \ge 0$
 
 \begin{equation}
-  L(w, b, \boldsymbol{\alpha}) = \frac{1}{2}\|w\|^2 - \sum^m_{i=1} \alpha_i[y_i(w \cdot \mathbf{x}_i + b)) - 1]
+  L(w, b, \boldsymbol{\alpha}) = \frac{1}{2}\|w\|^2 - \sum^m_{i=1} \boldsymbol{\alpha}_i[y_i(w \cdot \mathbf{x}_i + b)) - 1]
 \end{equation}
 
-This is called the dual formulation of the original optimization problem, called the primal problem, in which $w$ and $b$ are called primal variables and $\boldsymbol{\alpha}$ the dual variable. The primal optimization problem is equivalent to finding a saddle point of $L$, minimizing with respect to $w$ and $b$, while maximizing with respect to $\boldsymbol{\alpha}$.
+This is called the dual formulation of the original optimization problem, called the primal problem, in which $w$ and $b$ are called primal variables and $\boldsymbol{\alpha}$ the dual variable. The primal optimization problem is equivalent to finding a saddle point of $L$, minimizing with respect to $w$ and $b$, while maximizing with respect to $\boldsymbol{\alpha}$, this is called the Wolf dual \cite{Fletcher:1987:PMO:39857}.
 
 The solution to this problem is a saddle point, a different kind of extremum with respect to each of the variables. Because the solution is an extremum, we know that the partial derivative with respect to each of the variables will be zero. Thus the following equalities must hold
 

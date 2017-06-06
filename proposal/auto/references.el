@@ -2,6 +2,7 @@
  "references"
  (lambda ()
    (LaTeX-add-bibitems
+    "Fletcher:1987:PMO:39857"
     "kuhn1951"
     "Scholkopf:2001:LKS:559923"
     "Shalev-Shwartz:2007:PPE:1273496.1273598"
